@@ -17,6 +17,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
                     quit = __true;
                 }
             }
+
+            Draw_field(renderer);
+            Draw_timerface(renderer);
         }
     } else {
         fprintf(stderr, "Error! Something went wrong: %s\n", SDL_GetError());

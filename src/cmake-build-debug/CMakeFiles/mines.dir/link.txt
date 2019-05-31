@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/mines.dir/main.c.o CMakeFiles/mines.dir/libs/help_routines.c.o CMakeFiles/mines.dir/libs/draw.c.o  -o mines -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lm -lSTL 

@@ -19,12 +19,31 @@
 
 /* Data types */
 enum small_field {
-    small_width = 30,
-    small_height = 60,
+    small_width = 150,
+    small_height = 211,
     small_nmines = 10,
     small_tiles_x = 8,
     small_tiles_y = 8
 };
+
+enum fill_type {
+    miny,
+    digity,
+    nothing
+};
+
+enum check_type {
+    unchecked,
+    flaggy,
+    question
+};
+
+typedef struct __block {
+    struct SDL_Rect rect;
+    enum fill_type type;
+    enum check_type check;
+    char digit;
+} block;
 
 /* Function declarations */
 
@@ -32,5 +51,11 @@ enum small_field {
 __bool SDL_Init_All();
 __bool Init_custom_window(struct SDL_Window **window, struct SDL_Renderer **renderer, size_t width, size_t height);
 __bool Init_small_window(struct SDL_Window **window, struct SDL_Renderer **renderer);
+
+/* draw.c */
+void Draw_frame(struct SDL_Renderer *);
+void Draw_field(struct SDL_Renderer *);
+void Draw_timerface(struct SDL_Renderer *);
+
 
 #endif
