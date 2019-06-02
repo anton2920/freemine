@@ -42,6 +42,18 @@ __bool Init_window(struct SDL_Window **window, struct SDL_Renderer **renderer,
         } else if (!(*renderer = SDL_CreateRenderer(*window, -1, 0))) {
             return __false;
         }
+    } else if (s == medium) {
+        if ((*window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, medium_width, medium_height, SDL_WINDOW_SHOWN)) < 0) {
+            return __false;
+        } else if (!(*renderer = SDL_CreateRenderer(*window, -1, 0))) {
+            return __false;
+        }
+    } else if (s == large) {
+        if ((*window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, large_width, large_height, SDL_WINDOW_SHOWN)) < 0) {
+            return __false;
+        } else if (!(*renderer = SDL_CreateRenderer(*window, -1, 0))) {
+            return __false;
+        }
     }
 }
 
@@ -51,27 +63,36 @@ __bool Field_init(struct game_field *fld, enum field_size s) {
     auto int i, j;
 
     /* Main part */
+    fld->s = s;
     if (s == small) {
-        fld->s = s;
         fld->tiles_x = small_tiles_x;
         fld->tiles_y = small_tiles_y;
-        fld->g_state = game_off;
+    } else if (s == medium) {
+        fld->tiles_x = medium_tiles_x;
+        fld->tiles_y = medium_tiles_y;
+    } else if (s == large) {
+        fld->tiles_x = large_tiles_x;
+        fld->tiles_y = large_tiles_y;
     }
+
+    fld->g_state = game_off;
 
     if ((fld->fld = (block **) malloc(fld->tiles_y * sizeof(block *))) == NULL) {
         return __false;
     }
     for (i = 0; i < fld->tiles_y; ++i) {
-        fld->fld[i] = (block *) malloc(sizeof(block) * fld->tiles_x);
+        if ((fld->fld[i] = (block *) malloc(sizeof(block) * fld->tiles_x)) == NULL) {
+            return __false;
+        }
     }
 
     for (i = 0; i < fld->tiles_y; ++i) {
-        for (j = 0; j < fld->tiles_y; ++j) {
+        for (j = 0; j < fld->tiles_x; ++j) {
             fld->fld[i][j].type = nothing;
             fld->fld[i][j].check = unchecked;
             fld->fld[i][j].digit = 0;
-            fld->fld[i][j].rect.x = j * tile_w + j + ((fld->s == small) ? small_tiles_x_offset : -1);
-            fld->fld[i][j].rect.y = i * tile_h + i + ((fld->s == small) ? small_tiles_y_offset : -1);
+            fld->fld[i][j].rect.x = j * tile_w + j + ((s == small) ? small_tiles_x_offset : (s == medium) ? medium_tiles_x_offset : large_tiles_x_offset);
+            fld->fld[i][j].rect.y = i * tile_h + i + ((s == small) ? small_tiles_y_offset : (s == medium) ? medium_tiles_y_offset : large_tiles_y_offset);
             fld->fld[i][j].rect.w = tile_w;
             fld->fld[i][j].rect.h = tile_h;
         }
@@ -87,10 +108,8 @@ void Field_destroy(struct game_field *fld, enum field_size s) {
     auto int i;
 
     /* Main part */
-    if (s == small) {
-        for (i = 0; i < fld->tiles_y; ++i) {
-            free(fld->fld[i]);
-        }
+    for (i = 0; i < fld->tiles_y; ++i) {
+        free(fld->fld[i]);
     }
 
     free(fld->fld);
@@ -99,13 +118,13 @@ void Field_destroy(struct game_field *fld, enum field_size s) {
 enum field_size Get_Size(const char *argv[]) {
 
     /* Main part */
-    return (**(argv + 1) == '0') ? small : (**(argv + 1) == '1') ? medium : large;
+    return (**(argv + 1) == '0') ? small : (**(argv + 1) == '1') ? medium : (**(argv + 1) == '2') ? large : -1;
 }
 
 int mines_l(enum field_size s) {
 
     /* Returning value */
-    return (s == small) ? small_nmines : (s == medium) ? 0 : 1; /* Rewrite */
+    return (s == small) ? small_nmines : (s == medium) ? medium_nmines : large_nmines;
 }
 
 block *get_clicked_block(struct game_field *fld, int x, int y) {
@@ -164,6 +183,12 @@ __bool is_hit_face(enum field_size s, int x, int y) {
     if (s == small) {
         return (x >= small_face_x_offset && x <= small_face_x_offset + face_w &&
                 y >= small_face_y_offset && y <= small_face_y_offset + face_h) ? __true : __false;
+    } else if (s == medium) {
+        return (x >= medium_face_x_offset && x <= medium_face_x_offset + face_w &&
+                y >= medium_face_y_offset && y <= medium_face_y_offset + face_h) ? __true : __false;
+    } else if (s == large) {
+        return (x >= large_face_x_offset && x <= large_face_x_offset + face_w &&
+                y >= large_face_y_offset && y <= large_face_y_offset + face_h) ? __true : __false;
     }
 }
 

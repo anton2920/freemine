@@ -52,9 +52,11 @@ int main(int argc, const char *argv[], const char *envp[]) {
     srand(time(NULL) / 2);
     SDL_Init_All();
     if (Init_window(&window, &renderer, s)) {
-        Field_init(&field, s);
+        if (Field_init(&field, s) == __false) {
+            exit(0);
+        }
         minesleft = mines_l(field.s);
-        frameTexture = getTexture(renderer, FRAME_PATH);
+        frameTexture = getTexture(renderer, (field.s == small) ? FRAME_PATH : (field.s == medium) ? MID_FRAME_PATH : LARGE_FRAME_PATH);
         tilesTexture = getTexture(renderer, TILES_PATH);
         while (!quit) {
             switch (field.g_state) {
@@ -143,9 +145,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
                             beg_fc = fc;
                         }
                     } else if (event.type == SDL_MOUSEBUTTONUP) {
-                        if (event.button.button == SDL_BUTTON_LEFT && !get_ev) {
+                        if (event.button.button == SDL_BUTTON_LEFT && !get_ev && btn == mbtn_left) {
                             curr_block = get_clicked_block(&field, event.button.x, event.button.y);
-                            if (curr_block != NULL && beg_fc == face_o && btn == mbtn_left) {
+                            if (curr_block != NULL && beg_fc == face_o) {
                                 if (curr_block->check != flaggy && curr_block->check != pressed) {
                                     if (field.g_state == game_off) {
                                         field.g_state = game_start;
@@ -164,7 +166,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 currtime = 0;
                                 minesleft = mines_l(field.s);
                             }
-                        } else if (event.button.button == SDL_BUTTON_MIDDLE || get_ev) {
+                        } else if ((event.button.button == SDL_BUTTON_MIDDLE || get_ev) && btn == mbtn_mid) {
                             curr_block = get_clicked_block(&field, event.button.x, event.button.y);
                             if (curr_block != NULL) {
                                 if (field.g_state == game_start) {

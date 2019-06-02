@@ -43,6 +43,8 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #define LYAGUSHA (6585) /* For Samara's Voenkomat */
 
 #define FRAME_PATH ("../files/winmine.gif")
+#define MID_FRAME_PATH ("../files/mid_frame1.png")
+#define LARGE_FRAME_PATH ("../files/large_frame1.png")
 #define TILES_PATH ("../files/sprite.png")
 
 /* Data types */
@@ -68,6 +70,38 @@ enum small_field {
     small_face_y_offset = 35
 };
 
+enum medium_field {
+    medium_width = 280,
+    medium_height = 342,
+    medium_nmines = 40,
+    medium_tiles_x = 16,
+    medium_tiles_y = 16,
+    medium_tiles_x_offset = 14,
+    medium_tiles_y_offset = 74,
+    medium_timer_last_x_offset = 250,
+    medium_timer_last_y_offset = 35,
+    medium_mines_last_x_offset = 45,
+    medium_mines_last_y_offset = 35,
+    medium_face_x_offset = 129,
+    medium_face_y_offset = 35
+};
+
+enum large_field {
+    large_width = 503,
+    large_height = 342,
+    large_nmines = 99,
+    large_tiles_x = 30,
+    large_tiles_y = 16,
+    large_tiles_x_offset = 13,
+    large_tiles_y_offset = 74,
+    large_timer_last_x_offset = 473,
+    large_timer_last_y_offset = 35,
+    large_mines_last_x_offset = 44,
+    large_mines_last_y_offset = 35,
+    large_face_x_offset = 240,
+    large_face_y_offset = 35
+};
+
 enum fill_type {
     miny,
     miny_red,
@@ -88,7 +122,7 @@ enum check_type {
 enum tile_s {
     tile_w = 15,
     tile_h = 15,
-    tile_space = 1
+    tile_space = 1,
 };
 
 enum png_offset {
