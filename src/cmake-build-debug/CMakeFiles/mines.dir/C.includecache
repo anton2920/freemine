@@ -26,7 +26,7 @@ SDL2/SDL_ttf.h
 SDL2/SDL_mixer.h
 -
 
-/home/anton/mine/src/libs/mines.c
-../headers/mines.h
+/home/anton/mine/src/main.c
+headers/mines.h
 /home/anton/mine/src/headers/mines.h
 

@@ -38,7 +38,7 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #ifndef TITLE
     #define TITLE ("FreeMine")
 #endif
-#define DELAY_TIME (30)
+#define DELAY_TIME (60)
 #define WIN_PANEL (20)
 #define LYAGUSHA (6585) /* For Samara's Voenkomat */
 
@@ -87,7 +87,8 @@ enum check_type {
 
 enum tile_s {
     tile_w = 15,
-    tile_h = 15
+    tile_h = 15,
+    tile_space = 1
 };
 
 enum png_offset {
@@ -196,6 +197,7 @@ void Count_near(struct game_field *);
 void Process_press(struct game_field *, block *);
 void Open_near_blank(struct game_field *, block *);
 void Uncover_rest_mines(struct game_field *);
-void Check_for_win(struct game_field *);
+void Check_for_win(struct game_field *, int *);
+void Mine_searcher(struct game_field *, block *);
 
 #endif

@@ -167,6 +167,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
                         } else if (event.button.button == SDL_BUTTON_MIDDLE || get_ev) {
                             curr_block = get_clicked_block(&field, event.button.x, event.button.y);
                             if (curr_block != NULL) {
+                                if (field.g_state == game_start) {
+                                    Mine_searcher(&field, curr_block);
+                                }
                                 if (!is_start) {
                                     starttime = SDL_GetTicks();
                                     is_start = __true;
@@ -203,6 +206,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 two_btns(&field, event.motion.x, event.motion.y);
                                 fc = face_o;
                                 break;
+                            case mbtn_right:
+                                btn = mbtn_no_btn;
                             default:
                                 break;
                         }
@@ -243,6 +248,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                 currtime = SDL_GetTicks() + 1000 - starttime;
             }
             SDL_RenderClear(renderer);
+            Check_for_win(&field, &minesleft);
             Draw_frame(renderer, frameTexture, field.s);
             Draw_field(renderer, tilesTexture, &field);
             Draw_timerface(renderer, tilesTexture, s, (currtime / 1000), minesleft, fc);

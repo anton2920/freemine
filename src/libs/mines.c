@@ -90,8 +90,6 @@ void Process_press(struct game_field *fld, block *curr_block) {
         default:
             break;
     }
-
-    /* Check_for_win(fld); */
 }
 
 void Open_near_blank(struct game_field *fld, block *curr_block) {
@@ -148,8 +146,82 @@ void Uncover_rest_mines(struct game_field *fld) {
     }
 }
 
-void Mine_searcher(struct game_field *fld, block *obj) {
+void Check_for_win(struct game_field *fld, int *minesleft) {
 
     /* Initializing variables */
     auto int i, j;
+
+    /* Main part */
+    for (i = 0; i < fld->tiles_y; ++i) {
+        for (j = 0; j < fld->tiles_x; ++j) {
+            if (fld->fld[i][j].check != pressed && fld->fld[i][j].check != flaggy && fld->fld[i][j].type != miny && *minesleft) {
+                return;
+            }
+        }
+    }
+
+    if (!*minesleft) {
+        for (i = 0; i < fld->tiles_y; ++i) {
+            for (j = 0; j < fld->tiles_x; ++j) {
+                if (fld->fld[i][j].check != pressed && fld->fld[i][j].check != flaggy && fld->fld[i][j].type != miny) {
+                    fld->fld[i][j].check = pressed;
+                }
+            }
+        }
+        fld->g_state = game_win;
+        return;
+    }
+
+    for (i = 0; i < fld->tiles_y; ++i) {
+        for (j = 0; j < fld->tiles_x; ++j) {
+            if (fld->fld[i][j].check != pressed && fld->fld[i][j].check != flaggy && fld->fld[i][j].type == miny) {
+                fld->fld[i][j].check = flaggy;
+                --*minesleft;
+            }
+        }
+    }
+}
+
+void Mine_searcher(struct game_field *fld, block *obj) {
+
+    /* Initializing variables */
+    auto int i = 0, j = 0, i1, j1, counter = 0;
+    auto __bool is_found = __false, can_search = __false;
+
+    /* Main part */
+    for (i = 0; i < fld->tiles_y; ++i) {
+        for (j = 0; j < fld->tiles_x; ++j) {
+            if (fld->fld[i] + j == obj) {
+                is_found = __true;
+                break;
+            }
+        }
+        if (is_found) {
+            break;
+        }
+    }
+
+    if (is_found) {
+        for (i1 = ((i - 1 >= 0) ? i - 1 : 0); i1 < ((i + 2 <= fld->tiles_y) ? i + 2 : fld->tiles_y); ++i1) {
+            for (j1 = ((j - 1 >= 0) ? j - 1 : 0); j1 < ((j + 2 <= fld->tiles_x) ? j + 2 : fld->tiles_x); ++j1) {
+                if (fld->fld[i1][j1].check == flaggy) {
+                    ++counter;
+                }
+            }
+        }
+
+        if (counter >= obj->digit) {
+            can_search = __true;
+        }
+
+        if (can_search) {
+            for (i1 = ((i - 1 >= 0) ? i - 1 : 0); i1 < ((i + 2 <= fld->tiles_y) ? i + 2 : fld->tiles_y); ++i1) {
+                for (j1 = ((j - 1 >= 0) ? j - 1 : 0); j1 < ((j + 2 <= fld->tiles_x) ? j + 2 : fld->tiles_x); ++j1) {
+                    if (fld->fld[i1][j1].check != pressed && fld->fld[i1][j1].check != flaggy) {
+                        Process_press(fld, fld->fld[i1] + j1);
+                    }
+                }
+            }
+        }
+    }
 }

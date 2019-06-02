@@ -116,8 +116,8 @@ block *get_clicked_block(struct game_field *fld, int x, int y) {
     /* Main part */
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
-            if (x >= fld->fld[i][j].rect.x && x <= fld->fld[i][j].rect.x + fld->fld[i][j].rect.w &&
-                    y >= fld->fld[i][j].rect.y && y <= fld->fld[i][j].rect.y + fld->fld[i][j].rect.h) {
+            if (x >= fld->fld[i][j].rect.x - tile_space && x <= fld->fld[i][j].rect.x + fld->fld[i][j].rect.w &&
+                    y >= fld->fld[i][j].rect.y - tile_space && y <= fld->fld[i][j].rect.y + fld->fld[i][j].rect.h) {
                 return fld->fld[i] + j;
             }
         }
