@@ -1,3 +1,23 @@
+/*
+FreeMine — a free Windows minesweeper clone written on C with SDL2
+Copyright © Pavlovsky Anton, 2019
+
+This file is part of FreeMine.
+
+FreeMine is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+FreeMine is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
+*/
+
 #ifndef SRC_MINES_H
 #define SRC_MINES_H
 
@@ -50,15 +70,19 @@ enum small_field {
 
 enum fill_type {
     miny,
+    miny_red,
+    miny_cross,
     digity,
     nothing
 };
 
 enum check_type {
     unchecked,
+    hovered,
     pressed,
     flaggy,
-    question
+    question,
+    hovered_question
 };
 
 enum tile_s {
@@ -75,8 +99,27 @@ enum png_offset {
     flaggy_y = 39,
     question_x = 80,
     question_y = 39,
-    face1_x_offset = 0,
-    face1_y_offset = 56
+    hovered_question_x = 96,
+    hovered_question_y = 39,
+    face_normal_x_offset = 0,
+    face_pressed_x_offset = 26,
+    face_o_x_offset = 52,
+    face_dead_x_offset = 78,
+    face_cool_x_offset = 104,
+    face_y_offset = 56,
+    digity_y = 23,
+    digit_1_x = 16,
+    digit_2_x = 32,
+    digit_3_x = 48,
+    digit_4_x = 64,
+    digit_5_x = 80,
+    digit_6_x = 96,
+    digit_7_x = 112,
+    digit_8_x = 128,
+    mine_y = 39,
+    mine_red_x = 32,
+    mine_crossed_x = 48,
+    mine_black_x = 64
 };
 
 enum digit_s {
@@ -90,21 +133,40 @@ enum face_s {
 };
 
 enum mbtn {
+    mbtn_no_btn,
     mbtn_left,
     mbtn_right,
     mbtn_mid
+};
+
+enum face_state {
+    face_normal,
+    face_pressed,
+    face_o,
+    face_dead,
+    face_cool
+};
+
+enum game_state {
+    game_off,
+    game_start,
+    game_lose,
+    game_win
 };
 
 typedef struct __block {
     struct SDL_Rect rect;
     enum fill_type type;
     enum check_type check;
-    char digit;
+    int digit;
 } block;
 
 struct game_field {
     block **fld;
+    int tiles_x;
+    int tiles_y;
     enum field_size s;
+    enum game_state g_state;
 };
 
 /* Function declarations */
@@ -116,14 +178,24 @@ __bool Field_init(struct game_field *, enum field_size);
 void Field_destroy(struct game_field *, enum field_size);
 enum field_size Get_Size(const char *argv[]);
 int mines_l(enum field_size);
-block **get_clicked_block(struct game_field *, int, int);
-void switch_block_check_type(block **, enum mbtn);
+block *get_clicked_block(struct game_field *, int, int);
+enum check_type switch_block_check_type(block *, enum mbtn);
+void Block_untoggle_hovered(struct game_field *);
+__bool is_hit_face(enum field_size, int, int);
+void two_btns(struct game_field *, int, int);
 
 /* draw.c */
 struct SDL_Texture *getTexture(struct SDL_Renderer *, char *name);
 void Draw_frame(struct SDL_Renderer *, struct SDL_Texture *, enum field_size);
 void Draw_field(struct SDL_Renderer *, struct SDL_Texture *, struct game_field *);
-void Draw_timerface(struct SDL_Renderer *, struct SDL_Texture *, enum field_size, size_t, int);
+void Draw_timerface(struct SDL_Renderer *, struct SDL_Texture *, enum field_size, size_t, int, enum face_state);
 
+/* mines.c */
+void Spawn_mines(struct game_field *, block *);
+void Count_near(struct game_field *);
+void Process_press(struct game_field *, block *);
+void Open_near_blank(struct game_field *, block *);
+void Uncover_rest_mines(struct game_field *);
+void Check_for_win(struct game_field *);
 
 #endif

@@ -87,6 +87,9 @@
 		<Unit filename="/home/anton/mine/src/libs/help_routines.c">
 			<Option target="mines"/>
 		</Unit>
+		<Unit filename="/home/anton/mine/src/libs/mines.c">
+			<Option target="mines"/>
+		</Unit>
 		<Unit filename="/home/anton/mine/src/main.c">
 			<Option target="mines"/>
 		</Unit>
