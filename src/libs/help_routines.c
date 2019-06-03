@@ -76,6 +76,9 @@ __bool Field_init(struct game_field *fld, enum field_size s) {
     }
 
     fld->g_state = game_off;
+    fld->m_state = menu_off;
+    fld->is_mks_on = __true;
+    fld->is_snd_on = __false;
 
     if ((fld->fld = (block **) malloc(fld->tiles_y * sizeof(block *))) == NULL) {
         return __false;
@@ -114,10 +117,10 @@ void Field_destroy(struct game_field *fld, enum field_size s) {
     free(fld->fld);
 }
 
-enum field_size Get_Size(const char *argv[]) {
+enum field_size Get_Size(int argc, const char *argv[]) {
 
     /* Main part */
-    return (**(argv + 1) == '0') ? small : (**(argv + 1) == '1') ? medium : (**(argv + 1) == '2') ? large : -1;
+    return (argc != 2) ? small : (**(argv + 1) == '0') ? small : (**(argv + 1) == '1') ? medium : (**(argv + 1) == '2') ? large : -1;
 }
 
 int mines_l(enum field_size s) {
@@ -145,12 +148,18 @@ block *get_clicked_block(struct game_field *fld, int x, int y) {
     return NULL;
 }
 
-enum check_type switch_block_check_type(block *blk, enum mbtn b) {
+enum check_type switch_block_check_type(block *blk, enum mbtn b, __bool is_mks) {
 
     /* Main part */
     if (b == mbtn_right) {
-        if (blk->check != pressed) {
-            blk->check = (blk->check == unchecked) ? flaggy : (blk->check == flaggy) ? question : (blk->check == question) ? unchecked : flaggy;
+        if (is_mks) {
+            if (blk->check != pressed) {
+                blk->check = (blk->check == unchecked) ? flaggy : (blk->check == flaggy) ? question : (blk->check == question) ? unchecked : flaggy;
+            }
+        } else {
+            if (blk->check != pressed) {
+                blk->check = (blk->check == unchecked) ? flaggy : (blk->check == flaggy) ? unchecked : flaggy;
+            }
         }
     } else if (b == mbtn_left) {
         if (blk->check != flaggy && blk->check != pressed) {
@@ -222,4 +231,35 @@ void two_btns(struct game_field *fld, int x, int y) {
         }
     }
 
+}
+
+void Menu_state_init(struct game_field *fld, struct menu_state *st) {
+
+    /* Main part */
+    st->menu_i_begginer = (fld->s == small) ? __true : __false;
+    st->menu_i_intermediate = (fld->s == medium) ? __true : __false;
+    st->menu_i_advanced = (fld->s == large) ? __true : __false;
+
+    st->menu_i_marks = __true;
+    st->menu_i_color = __true;
+    st->menu_i_sound = __false;
+
+    st->is_hovered = NOT_HOVERED;
+}
+
+void Play_music(Mix_Music **fon, char *name) {
+
+    /* Initializing variables */
+    *fon = Mix_LoadMUS(name);
+    assert(fon != NULL);
+
+    /* Main part */
+    Mix_PlayMusic(*fon, -1);
+
+}
+
+void Play_click_sound(struct Mix_Chunk *Sound) {
+
+    /* Main part */
+    Mix_PlayChannel(-1, Sound, 0);
 }

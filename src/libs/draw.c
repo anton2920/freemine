@@ -185,3 +185,96 @@ void Draw_timerface(struct SDL_Renderer *renderer, struct SDL_Texture *timerText
     currT.h = bTile.h;
     SDL_RenderCopy(renderer, timerText, &currT, &bTile);
 }
+
+void Draw_menu(struct SDL_Renderer *renderer, struct game_field *fld, struct menu_state *st,
+        struct SDL_Texture *menu_game, struct SDL_Texture *select, struct SDL_Texture *tiles) {
+
+    /* Initializing variables */
+    auto struct SDL_Rect drawRect = {0, 0, menu_panel_w, menu_panel_h};
+    auto struct SDL_Rect tickRect = {tick_x_offset, tick_black_y_offset, tick_w, tick_h};
+    auto struct SDL_Rect selRect = {0, 0, menu_itm_w, menu_itm_h};
+
+    /* Main part */
+    if (fld->m_state == menu_game_pressed) {
+        if (fld->s == small) {
+            drawRect.x = small_menu_game_x_offset;
+            drawRect.y = small_menu_game_y_offset;
+        } else if (fld->s == medium) {
+            drawRect.x = medium_menu_game_x_offset;
+            drawRect.y = medium_menu_game_y_offset;
+        } else if (fld->s == large) {
+            drawRect.x = large_menu_game_x_offset;
+            drawRect.y = large_menu_game_y_offset;
+        }
+
+        SDL_RenderCopy(renderer, menu_game, NULL, &drawRect);
+
+        drawRect.w = tick_w;
+        drawRect.h = tick_h;
+        drawRect.x = (fld->s == small) ? small_tick_x_offset : (fld->s == medium) ? medium_tick_x_offset : large_tick_x_offset;
+        drawRect.y = (st->menu_i_begginer) ? tick_y_beg : (st->menu_i_intermediate) ? tick_y_interm : tick_y_adv;
+        SDL_RenderCopy(renderer, tiles, &tickRect, &drawRect);
+
+        if (st->menu_i_marks) {
+            drawRect.y = tick_y_mks;
+            SDL_RenderCopy(renderer, tiles, &tickRect, &drawRect);
+        }
+        if (st->menu_i_color) {
+            drawRect.y = tick_y_clr;
+            SDL_RenderCopy(renderer, tiles, &tickRect, &drawRect);
+        }
+        if (st->menu_i_sound) {
+            drawRect.y = tick_y_snd;
+            SDL_RenderCopy(renderer, tiles, &tickRect, &drawRect);
+        }
+
+        if (st->is_hovered != NOT_HOVERED) {
+            if (fld->s == small) {
+                drawRect.x = small_menu_game_x_offset;
+                drawRect.y = small_menu_game_y_offset;
+            } else if (fld->s == medium) {
+                drawRect.x = medium_menu_game_x_offset;
+                drawRect.y = medium_menu_game_y_offset;
+            } else if (fld->s == large) {
+                drawRect.x = large_menu_game_x_offset;
+                drawRect.y = large_menu_game_y_offset;
+            }
+
+            drawRect.x += menu_itm_add_y_offset;
+
+            tickRect.y = tick_white_y_offset;
+            drawRect.w = menu_itm_w;
+            drawRect.h = menu_itm_h;
+
+            drawRect.y += (!st->is_hovered) ? (menu_new_y_offset) : (st->is_hovered == 1) ? (menu_beg_y_offset) :
+                    (st->is_hovered == 2) ? (menu_interm_y_offset) : (st->is_hovered == 3) ? (menu_adv_y_offset) :
+                    (st->is_hovered == 4) ? (menu_mks_y_offset) : (st->is_hovered == 5) ? (menu_clr_y_offset) :
+                    (st->is_hovered == 6) ? (menu_snd_y_offset) : (st->is_hovered == 7) ? (menu_tabl_y_offset) : (menu_exit_y_offset);
+            selRect.y = st->is_hovered * menu_itm_h;
+            SDL_RenderCopy(renderer, select, &selRect, &drawRect);
+
+            drawRect.w = tick_w;
+            drawRect.h = tick_h;
+            drawRect.x = (fld->s == small) ? small_tick_x_offset : (fld->s == medium) ? medium_tick_x_offset : large_tick_x_offset;
+            drawRect.y = (st->menu_i_begginer && st->is_hovered == 1) ? tick_y_beg :
+                    (st->menu_i_intermediate && st->is_hovered == 2) ? tick_y_interm :
+                    (st->menu_i_advanced && st->is_hovered == 3) ? tick_y_adv : 0;
+            if (st->is_hovered >= 1 && st->is_hovered <= 3 && drawRect.y) {
+                SDL_RenderCopy(renderer, tiles, &tickRect, &drawRect);
+            }
+
+            if (st->menu_i_marks && st->is_hovered == 4) {
+                drawRect.y = tick_y_mks;
+                SDL_RenderCopy(renderer, tiles, &tickRect, &drawRect);
+            }
+            if (st->menu_i_color && st->is_hovered == 5) {
+                drawRect.y = tick_y_clr;
+                SDL_RenderCopy(renderer, tiles, &tickRect, &drawRect);
+            }
+            if (st->menu_i_sound && st->is_hovered == 6) {
+                drawRect.y = tick_y_snd;
+                SDL_RenderCopy(renderer, tiles, &tickRect, &drawRect);
+            }
+        }
+    }
+}

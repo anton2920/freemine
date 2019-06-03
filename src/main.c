@@ -23,8 +23,6 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 int main(int argc, const char *argv[], const char *envp[]) {
 
     /* Initializing variables */
-    assert(argc == 2);
-
     auto __bool quit = __false;
     auto union SDL_Event event, new_event;
     auto int get_ev = 0;
@@ -34,11 +32,13 @@ int main(int argc, const char *argv[], const char *envp[]) {
 
     auto struct SDL_Texture *frameTexture = NULL;
     auto struct SDL_Texture *tilesTexture = NULL;
-    auto struct SDL_Texture *menu_game_texture;
-    auto struct SDL_Texture *menu_help_texture;
+    auto struct SDL_Texture *menu_texture = NULL;
+    auto struct SDL_Texture *selectTexture = NULL;
 
     auto struct game_field field;
-    auto enum field_size s = Get_Size(argv);
+    auto enum field_size s = Get_Size(argc, argv);
+    auto struct menu_state m_state;
+    auto int menu_press_state = -1;
 
     auto size_t starttime = 0, currtime = 0;
     auto int minesleft;
@@ -49,19 +49,26 @@ int main(int argc, const char *argv[], const char *envp[]) {
     auto block *curr_block;
     auto enum check_type ch = unchecked;
     auto enum mbtn btn = mbtn_no_btn;
+    auto enum menu_panel ch_state = menu_off;
+
+    auto struct Mix_Chunk *click = NULL;
+    auto Mix_Music *mus = NULL;
 
     /* Main part. SDL2 */
     srand(time(NULL) / 2);
     SDL_Init_All();
     if (Init_window(&window, &renderer, s)) {
         if (Field_init(&field, s) == __false) {
-            exit(0);
+            exit(BAD_EXIT_CODE);
         }
+        Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);
+        Menu_state_init(&field, &m_state);
         minesleft = mines_l(field.s);
         frameTexture = getTexture(renderer, (field.s == small) ? FRAME_PATH : (field.s == medium) ? MID_FRAME_PATH : LARGE_FRAME_PATH);
         tilesTexture = getTexture(renderer, TILES_PATH);
-        /*menu_game_texture = getTexture(renderer, MENU_GAME_PATH);
-        menu_help_texture = getTexture(renderer, MENU_HELP_PATH);*/
+        menu_texture = getTexture(renderer, MENU_GAME_PATH);
+        selectTexture = getTexture(renderer, SELECTED_MENU_PATH);
+        click = Mix_LoadWAV(CLICK_SND_PATH);
         while (!quit) {
             switch (field.g_state) {
                 case game_off: case game_start:
@@ -108,10 +115,13 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 btn = mbtn_right;
                                 curr_block = get_clicked_block(&field, event.button.x, event.button.y);
                                 if (curr_block != NULL) {
-                                    if ((ch = switch_block_check_type(curr_block, mbtn_right)) == flaggy) {
+                                    if ((ch = switch_block_check_type(curr_block, mbtn_right, field.is_mks_on)) == flaggy) {
                                         --minesleft;
                                     } else if (ch == question) {
                                         ++minesleft;
+                                    }
+                                    if (field.is_snd_on) {
+                                        Play_click_sound(click);
                                     }
                                 }
                             } else if (btn == mbtn_left) {
@@ -135,7 +145,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 } else if (is_hit_face(field.s, event.button.x, event.button.y)) {
                                     fc = face_pressed;
                                 }
-                                /* field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y); */
+                                if (field.m_state == menu_off || !Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
+                                    ch_state = field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, PRESS, ch_state);
+                                }
                                 beg_fc = fc;
                             } else if (btn == mbtn_right) {
                                 btn = mbtn_mid;
@@ -152,13 +164,78 @@ int main(int argc, const char *argv[], const char *envp[]) {
                     } else if (event.type == SDL_MOUSEBUTTONUP) {
                         if (event.button.button == SDL_BUTTON_LEFT && !get_ev && btn == mbtn_left) {
                             curr_block = get_clicked_block(&field, event.button.x, event.button.y);
-                            if (curr_block != NULL && beg_fc == face_o) {
+                            if (field.m_state == menu_game_pressed && Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
+                                if (!(menu_press_state = Process_menu_press(&m_state))) {
+                                    Field_init(&field, s);
+                                    is_start = __false;
+                                    starttime = 0;
+                                    currtime = 0;
+                                    minesleft = mines_l(field.s);
+                                    fc = face_normal;
+                                    beg_fc = fc;
+                                } else if (menu_press_state >= 1 && menu_press_state <= 3) {
+                                    if ((s == small && menu_press_state == 1) ||
+                                        (s == medium && menu_press_state == 2) ||
+                                        (s == large && menu_press_state == 3)) {
+                                        continue;
+                                    }
+                                    SDL_DestroyTexture(frameTexture);
+                                    SDL_DestroyTexture(tilesTexture);
+                                    SDL_DestroyTexture(menu_texture);
+                                    SDL_DestroyTexture(selectTexture);
+                                    SDL_DestroyRenderer(renderer);
+                                    SDL_DestroyWindow(window);
+                                    s = (menu_press_state == 1) ? small : (menu_press_state == 2) ? medium : large;
+                                    if (Init_window(&window, &renderer, s)) {
+                                        if (Field_init(&field, s) == __false) {
+                                            exit(BAD_EXIT_CODE);
+                                        }
+
+                                        is_start = __false;
+                                        starttime = 0;
+                                        currtime = 0;
+                                        minesleft = mines_l(field.s);
+                                        fc = face_normal;
+                                        beg_fc = fc;
+
+                                        Menu_state_init(&field, &m_state);
+                                        minesleft = mines_l(field.s);
+                                        frameTexture = getTexture(renderer, (field.s == small) ? FRAME_PATH : (field.s == medium) ? MID_FRAME_PATH : LARGE_FRAME_PATH);
+                                        tilesTexture = getTexture(renderer, TILES_PATH);
+                                        menu_texture = getTexture(renderer, MENU_GAME_PATH);
+                                        selectTexture = getTexture(renderer, SELECTED_MENU_PATH);
+                                        continue;
+                                    } else {
+                                        fprintf(stderr, "Error! Something went wrong: %s\n", SDL_GetError());
+                                    }
+                                } else if (menu_press_state == 4) {
+                                    field.is_mks_on = m_state.menu_i_marks;
+                                } else if (menu_press_state == 5) {
+                                    /* Colorless */
+                                } else if (menu_press_state == 6) {
+                                    field.is_snd_on = m_state.menu_i_sound;
+                                    if (field.is_snd_on) {
+                                        Play_music(&mus, MUS_PATH);
+                                    } else {
+                                        Mix_FreeMusic(mus);
+                                    }
+                                } else if (menu_press_state == 7) {
+                                    /* Table of records */
+                                } else if (menu_press_state == 8) {
+                                    quit = __true;
+                                    break;
+                                }
+                                field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, UNPRESS, ch_state);
+                            } else if (curr_block != NULL && beg_fc == face_o) {
                                 if (curr_block->check != flaggy && curr_block->check != pressed) {
                                     if (field.g_state == game_off) {
                                         field.g_state = game_start;
                                         Spawn_mines(&field, curr_block);
                                     }
                                     Process_press(&field, curr_block);
+                                    if (field.is_snd_on) {
+                                        Play_click_sound(click);
+                                    }
                                 }
                                 if (!is_start) {
                                     starttime = SDL_GetTicks();
@@ -170,6 +247,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 starttime = 0;
                                 currtime = 0;
                                 minesleft = mines_l(field.s);
+                                if (field.is_snd_on) {
+                                    Play_click_sound(click);
+                                }
                             }
                         } else if ((event.button.button == SDL_BUTTON_MIDDLE || get_ev) && btn == mbtn_mid) {
                             curr_block = get_clicked_block(&field, event.button.x, event.button.y);
@@ -218,6 +298,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                             default:
                                 break;
                         }
+                        Check_hover(field.s, &m_state, event.motion.x, event.motion.y);
                     }
                 } else {
                     if (event.type == SDL_MOUSEBUTTONDOWN) {
@@ -225,6 +306,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
                             if (is_hit_face(field.s, event.button.x, event.button.y)) {
                                 fc = face_pressed;
                                 btn = mbtn_left;
+                            }
+                            if (field.m_state == menu_off) {
+                                ch_state = field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, PRESS, ch_state);
                             }
                         }
                     } else if (event.type == SDL_MOUSEBUTTONUP) {
@@ -237,7 +321,70 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 minesleft = mines_l(field.s);
                                 fc = face_normal;
                                 beg_fc = fc;
+                            } else if (field.m_state == menu_game_pressed && Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
+                                if (!(menu_press_state = Process_menu_press(&m_state))) {
+                                    Field_init(&field, s);
+                                    is_start = __false;
+                                    starttime = 0;
+                                    currtime = 0;
+                                    minesleft = mines_l(field.s);
+                                    fc = face_normal;
+                                    beg_fc = fc;
+                                } else if (menu_press_state >= 1 && menu_press_state <= 3) {
+                                    if ((s == small && menu_press_state == 1) ||
+                                        (s == medium && menu_press_state == 2) ||
+                                        (s == large && menu_press_state == 3)) {
+                                        continue;
+                                    }
+                                    SDL_DestroyTexture(frameTexture);
+                                    SDL_DestroyTexture(tilesTexture);
+                                    SDL_DestroyTexture(menu_texture);
+                                    SDL_DestroyTexture(selectTexture);
+                                    SDL_DestroyRenderer(renderer);
+                                    SDL_DestroyWindow(window);
+                                    s = (menu_press_state == 1) ? small : (menu_press_state == 2) ? medium : large;
+                                    if (Init_window(&window, &renderer, s)) {
+                                        if (Field_init(&field, s) == __false) {
+                                            exit(BAD_EXIT_CODE);
+                                        }
+
+                                        is_start = __false;
+                                        starttime = 0;
+                                        currtime = 0;
+                                        minesleft = mines_l(field.s);
+                                        fc = face_normal;
+                                        beg_fc = fc;
+
+                                        Menu_state_init(&field, &m_state);
+                                        minesleft = mines_l(field.s);
+                                        frameTexture = getTexture(renderer, (field.s == small) ? FRAME_PATH : (field.s == medium) ? MID_FRAME_PATH : LARGE_FRAME_PATH);
+                                        tilesTexture = getTexture(renderer, TILES_PATH);
+                                        menu_texture = getTexture(renderer, MENU_GAME_PATH);
+                                        selectTexture = getTexture(renderer, SELECTED_MENU_PATH);
+                                        continue;
+                                    } else {
+                                        fprintf(stderr, "Error! Something went wrong: %s\n", SDL_GetError());
+                                    }
+                                } else if (menu_press_state == 4) {
+                                    field.is_mks_on = m_state.menu_i_marks;
+                                } else if (menu_press_state == 5) {
+                                    /* Colorless */
+                                } else if (menu_press_state == 6) {
+                                    field.is_snd_on = m_state.menu_i_sound;
+                                    if (field.is_snd_on) {
+                                        Play_music(&mus, MUS_PATH);
+                                    } else {
+                                        Mix_FreeMusic(mus);
+                                    }
+                                } else if (menu_press_state == 7) {
+                                    /* Table of records */
+                                } else if (menu_press_state == 8) {
+                                    quit = __true;
+                                    break;
+                                }
                             }
+
+                            field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, UNPRESS, ch_state);
                         }
                         btn = mbtn_no_btn;
                     } else if (event.type == SDL_MOUSEMOTION) {
@@ -248,6 +395,19 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 fc = beg_fc;
                             }
                         }
+                        Check_hover(field.s, &m_state, event.motion.x, event.motion.y);
+                    }
+                }
+
+                if (event.type == SDL_KEYDOWN) {
+                    if (event.key.keysym.sym == SDLK_F2) {
+                        Field_init(&field, s);
+                        is_start = __false;
+                        starttime = 0;
+                        currtime = 0;
+                        minesleft = mines_l(field.s);
+                        fc = face_normal;
+                        beg_fc = fc;
                     }
                 }
             }
@@ -262,9 +422,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
             Draw_frame(renderer, frameTexture, field.s);
             Draw_field(renderer, tilesTexture, &field);
             Draw_timerface(renderer, tilesTexture, s, (currtime / 1000), minesleft, fc);
-            /*if (field.m_state != menu_off) {
-                Show_menu();
-            }*/
+            if (field.m_state != menu_off) {
+                Draw_menu(renderer, &field, &m_state, menu_texture, selectTexture, tilesTexture);
+            }
             SDL_RenderPresent(renderer);
             SDL_Delay(DELAY_TIME);
         }
@@ -276,8 +436,11 @@ int main(int argc, const char *argv[], const char *envp[]) {
     Field_destroy(&field, s);
     SDL_DestroyTexture(frameTexture);
     SDL_DestroyTexture(tilesTexture);
+    SDL_DestroyTexture(menu_texture);
+    SDL_DestroyTexture(selectTexture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    Mix_FreeChunk(click);
     Mix_Quit();
     TTF_Quit();
     SDL_Quit();

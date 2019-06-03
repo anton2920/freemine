@@ -37,17 +37,29 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #ifndef TITLE
     #define TITLE ("FreeMine")
 #endif
-#define DELAY_TIME (30)
+#define DELAY_TIME (10)
 #define WIN_PANEL (20)
 #define LINUX_PANEL (WIN_PANEL + 3)
+#ifndef BAD_EXIT_CODE
+    #define BAD_EXIT_CODE (-1)
+#endif
+#define PRESS (1)
+#define UNPRESS (2)
+#define NOT_HOVERED (-1)
+#define REVERSE_BOOL(__expr) ((__expr) == __true) ? __false : __true
 #define LYAGUSHA (6585) /* For Samara's Voenkomat */
 
-#define FRAME_PATH ("../files/winmine.gif")
+#define FRAME_PATH ("../files/winmine1.gif")
 #define MID_FRAME_PATH ("../files/mid_frame1.png")
 #define LARGE_FRAME_PATH ("../files/large_frame1.png")
 #define TILES_PATH ("../files/sprite.png")
 #define MENU_GAME_PATH ("../files/menu_game.png")
-#define MENU_HELP_PATH ("../files/menu_help.png")
+#define SELECTED_MENU_PATH ("../files/selected_menu.png")
+
+#define MUS_PATH ("../files/mus.mp3")
+#define CLICK_SND_PATH ("../files/click.wav")
+
+#define RECORDS_PATH ("../files/records.bin")
 
 /* Data types */
 #ifndef __BOOL_TYPE
@@ -79,10 +91,9 @@ enum small_field {
     small_mines_last_y_offset = 36,
     small_face_x_offset = 65,
     small_face_y_offset = 35,
-    small_menu_game_x_offset = 0,
-    small_menu_game_y_offset = WIN_PANEL,
-    small_menu_help_x_offset,
-    small_menu_help_y_offset = WIN_PANEL
+    small_menu_game_x_offset = 3,
+    small_menu_game_y_offset = 0,
+    small_tick_x_offset = 11
 };
 
 enum medium_field {
@@ -99,8 +110,9 @@ enum medium_field {
     medium_mines_last_y_offset = 35,
     medium_face_x_offset = 129,
     medium_face_y_offset = 35,
-    medium_menu_game_x_offset = 0,
-    medium_menu_game_y_offset = LINUX_PANEL + 2
+    medium_menu_game_x_offset = 2,
+    medium_menu_game_y_offset = 0,
+    medium_tick_x_offset = 10
 };
 
 enum large_field {
@@ -117,8 +129,9 @@ enum large_field {
     large_mines_last_y_offset = 35,
     large_face_x_offset = 240,
     large_face_y_offset = 35,
-    large_menu_game_x_offset = 0,
-    large_menu_game_y_offset = LINUX_PANEL + 2
+    large_menu_game_x_offset = 1,
+    large_menu_game_y_offset = 0,
+    large_tick_x_offset = 9
 };
 
 enum fill_type {
@@ -174,8 +187,9 @@ enum png_offset {
     mine_red_x = 32,
     mine_crossed_x = 48,
     mine_black_x = 64,
-    tick_x_offset,
-    tick_y_offset
+    tick_x_offset = 140,
+    tick_black_y_offset = 49,
+    tick_white_y_offset = 77
 };
 
 enum digit_s {
@@ -210,12 +224,58 @@ enum game_state {
     game_win
 };
 
-enum menu_state {
+enum tick_size {
+    tick_w = 7,
+    tick_h = 7
+};
+
+enum menu_panel {
     menu_off,
     menu_game_pressed,
-    menu_help_pressed,
-    menu_w ,
-    menu_h = 20
+
+    menu_btn_w = 42,
+    menu_btn_h = 20,
+
+    menu_itm_w = 120,
+    menu_itm_h = 17,
+    menu_itm_add_y_offset = 3,
+
+    menu_panel_w = 166,
+    menu_panel_h = 214,
+
+    tick_y_beg = 54,
+    tick_y_interm = 71,
+    tick_y_adv = 88,
+
+    tick_y_mks = 114,
+    tick_y_clr = 131,
+    tick_y_snd = 148,
+
+    menu_new_y_offset = 22,
+
+    menu_beg_y_offset = 48,
+    menu_interm_y_offset = 65,
+    menu_adv_y_offset = 82,
+
+    menu_mks_y_offset = 108,
+    menu_clr_y_offset = 125,
+    menu_snd_y_offset = 142,
+
+    menu_tabl_y_offset = 168,
+
+    menu_exit_y_offset = 194
+};
+
+struct menu_state {
+    __bool menu_i_begginer;
+    __bool menu_i_intermediate;
+    __bool menu_i_advanced;
+
+    __bool menu_i_marks;
+    __bool menu_i_color;
+    __bool menu_i_sound;
+
+    int is_hovered; /* one one to eight, -1 if not */
 };
 
 typedef struct __block {
@@ -231,7 +291,9 @@ struct game_field {
     int tiles_y;
     enum field_size s;
     enum game_state g_state;
-    enum menu_state m_state;
+    enum menu_panel m_state;
+    __bool is_mks_on;
+    __bool is_snd_on;
 };
 
 /* Function declarations */
@@ -241,19 +303,24 @@ __bool SDL_Init_All();
 __bool Init_window(struct SDL_Window **window, struct SDL_Renderer **renderer, enum field_size);
 __bool Field_init(struct game_field *, enum field_size);
 void Field_destroy(struct game_field *, enum field_size);
-enum field_size Get_Size(const char *argv[]);
+enum field_size Get_Size(int, const char *argv[]);
 int mines_l(enum field_size);
 block *get_clicked_block(struct game_field *, int, int);
-enum check_type switch_block_check_type(block *, enum mbtn);
+enum check_type switch_block_check_type(block *, enum mbtn, __bool);
 void Block_untoggle_hovered(struct game_field *);
 __bool is_hit_face(enum field_size, int, int);
 void two_btns(struct game_field *, int, int);
+void Menu_state_init(struct game_field *, struct menu_state *);
+void Play_music(Mix_Music **fon, char *name);
+void Play_click_sound(struct Mix_Chunk *Sound);
 
 /* draw.c */
 struct SDL_Texture *getTexture(struct SDL_Renderer *, char *name);
 void Draw_frame(struct SDL_Renderer *, struct SDL_Texture *, enum field_size);
 void Draw_field(struct SDL_Renderer *, struct SDL_Texture *, struct game_field *);
 void Draw_timerface(struct SDL_Renderer *, struct SDL_Texture *, enum field_size, size_t, int, enum face_state);
+void Draw_menu(struct SDL_Renderer *, struct game_field *, struct menu_state *,
+               struct SDL_Texture *menu_game, struct SDL_Texture *select, struct SDL_Texture *tiles);
 
 /* mines.c */
 void Spawn_mines(struct game_field *, block *);
@@ -265,7 +332,8 @@ void Check_for_win(struct game_field *, int *);
 void Mine_searcher(struct game_field *, block *);
 
 /* menu.c */
-enum menu_state Is_menu_pressed(struct game_field *, int, int);
-
+enum menu_panel Is_menu_pressed(struct game_field *, int, int, int, enum menu_panel);
+__bool Check_hover(enum field_size, struct menu_state *, int x, int y);
+int Process_menu_press(struct menu_state *);
 
 #endif
