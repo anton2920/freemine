@@ -3,6 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/mines.dir/libs/help_routines.c.o"
   "CMakeFiles/mines.dir/libs/draw.c.o"
   "CMakeFiles/mines.dir/libs/mines.c.o"
+  "CMakeFiles/mines.dir/libs/menu.c.o"
   "mines.pdb"
   "mines"
 )

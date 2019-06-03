@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_C
   "/home/anton/mine/src/libs/draw.c" "/home/anton/mine/src/cmake-build-debug/CMakeFiles/mines.dir/libs/draw.c.o"
   "/home/anton/mine/src/libs/help_routines.c" "/home/anton/mine/src/cmake-build-debug/CMakeFiles/mines.dir/libs/help_routines.c.o"
+  "/home/anton/mine/src/libs/menu.c" "/home/anton/mine/src/cmake-build-debug/CMakeFiles/mines.dir/libs/menu.c.o"
   "/home/anton/mine/src/libs/mines.c" "/home/anton/mine/src/cmake-build-debug/CMakeFiles/mines.dir/libs/mines.c.o"
   "/home/anton/mine/src/main.c" "/home/anton/mine/src/cmake-build-debug/CMakeFiles/mines.dir/main.c.o"
   )

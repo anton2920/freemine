@@ -40,12 +40,15 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #endif
 #define DELAY_TIME (60)
 #define WIN_PANEL (20)
+#define LINUX_PANEL (WIN_PANEL + 3)
 #define LYAGUSHA (6585) /* For Samara's Voenkomat */
 
 #define FRAME_PATH ("../files/winmine.gif")
 #define MID_FRAME_PATH ("../files/mid_frame1.png")
 #define LARGE_FRAME_PATH ("../files/large_frame1.png")
 #define TILES_PATH ("../files/sprite.png")
+#define MENU_GAME_PATH ("../files/menu_game.png")
+#define MENU_HELP_PATH ("../files/menu_help.png")
 
 /* Data types */
 enum field_size {
@@ -67,7 +70,11 @@ enum small_field {
     small_mines_last_x_offset = 46,
     small_mines_last_y_offset = 36,
     small_face_x_offset = 65,
-    small_face_y_offset = 35
+    small_face_y_offset = 35,
+    small_menu_game_x_offset = 0,
+    small_menu_game_y_offset = WIN_PANEL,
+    small_menu_help_x_offset,
+    small_menu_help_y_offset = WIN_PANEL
 };
 
 enum medium_field {
@@ -83,7 +90,9 @@ enum medium_field {
     medium_mines_last_x_offset = 45,
     medium_mines_last_y_offset = 35,
     medium_face_x_offset = 129,
-    medium_face_y_offset = 35
+    medium_face_y_offset = 35,
+    medium_menu_game_x_offset = 0,
+    medium_menu_game_y_offset = LINUX_PANEL + 2
 };
 
 enum large_field {
@@ -99,7 +108,9 @@ enum large_field {
     large_mines_last_x_offset = 44,
     large_mines_last_y_offset = 35,
     large_face_x_offset = 240,
-    large_face_y_offset = 35
+    large_face_y_offset = 35,
+    large_menu_game_x_offset = 0,
+    large_menu_game_y_offset = LINUX_PANEL + 2
 };
 
 enum fill_type {
@@ -154,7 +165,9 @@ enum png_offset {
     mine_y = 39,
     mine_red_x = 32,
     mine_crossed_x = 48,
-    mine_black_x = 64
+    mine_black_x = 64,
+    tick_x_offset,
+    tick_y_offset
 };
 
 enum digit_s {
@@ -189,6 +202,14 @@ enum game_state {
     game_win
 };
 
+enum menu_state {
+    menu_off,
+    menu_game_pressed,
+    menu_help_pressed,
+    menu_w ,
+    menu_h = 20
+};
+
 typedef struct __block {
     struct SDL_Rect rect;
     enum fill_type type;
@@ -202,6 +223,7 @@ struct game_field {
     int tiles_y;
     enum field_size s;
     enum game_state g_state;
+    enum menu_state m_state;
 };
 
 /* Function declarations */
@@ -233,5 +255,9 @@ void Open_near_blank(struct game_field *, block *);
 void Uncover_rest_mines(struct game_field *);
 void Check_for_win(struct game_field *, int *);
 void Mine_searcher(struct game_field *, block *);
+
+/* menu.c */
+enum menu_state Is_menu_pressed(struct game_field *, int, int);
+
 
 #endif

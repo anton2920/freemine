@@ -85,7 +85,6 @@ __bool Field_init(struct game_field *fld, enum field_size s) {
             return __false;
         }
     }
-
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
             fld->fld[i][j].type = nothing;

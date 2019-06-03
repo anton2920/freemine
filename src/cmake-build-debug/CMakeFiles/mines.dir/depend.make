@@ -7,6 +7,9 @@ CMakeFiles/mines.dir/libs/draw.c.o: ../libs/draw.c
 CMakeFiles/mines.dir/libs/help_routines.c.o: ../headers/mines.h
 CMakeFiles/mines.dir/libs/help_routines.c.o: ../libs/help_routines.c
 
+CMakeFiles/mines.dir/libs/menu.c.o: ../headers/mines.h
+CMakeFiles/mines.dir/libs/menu.c.o: ../libs/menu.c
+
 CMakeFiles/mines.dir/libs/mines.c.o: ../headers/mines.h
 CMakeFiles/mines.dir/libs/mines.c.o: ../libs/mines.c
 

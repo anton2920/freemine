@@ -177,6 +177,33 @@ libs/help_routines.c.s:
 	$(MAKE) -f CMakeFiles/mines.dir/build.make CMakeFiles/mines.dir/libs/help_routines.c.s
 .PHONY : libs/help_routines.c.s
 
+libs/menu.o: libs/menu.c.o
+
+.PHONY : libs/menu.o
+
+# target to build an object file
+libs/menu.c.o:
+	$(MAKE) -f CMakeFiles/mines.dir/build.make CMakeFiles/mines.dir/libs/menu.c.o
+.PHONY : libs/menu.c.o
+
+libs/menu.i: libs/menu.c.i
+
+.PHONY : libs/menu.i
+
+# target to preprocess a source file
+libs/menu.c.i:
+	$(MAKE) -f CMakeFiles/mines.dir/build.make CMakeFiles/mines.dir/libs/menu.c.i
+.PHONY : libs/menu.c.i
+
+libs/menu.s: libs/menu.c.s
+
+.PHONY : libs/menu.s
+
+# target to generate assembly for a file
+libs/menu.c.s:
+	$(MAKE) -f CMakeFiles/mines.dir/build.make CMakeFiles/mines.dir/libs/menu.c.s
+.PHONY : libs/menu.c.s
+
 libs/mines.o: libs/mines.c.o
 
 .PHONY : libs/mines.o
@@ -246,6 +273,9 @@ help:
 	@echo "... libs/help_routines.o"
 	@echo "... libs/help_routines.i"
 	@echo "... libs/help_routines.s"
+	@echo "... libs/menu.o"
+	@echo "... libs/menu.i"
+	@echo "... libs/menu.s"
 	@echo "... libs/mines.o"
 	@echo "... libs/mines.i"
 	@echo "... libs/mines.s"

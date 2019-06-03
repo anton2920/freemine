@@ -51,13 +51,13 @@ void Draw_frame(struct SDL_Renderer *renderer, struct SDL_Texture *frameTexture,
     } else if (size == medium) {
         frameRect.w = medium_width;
         frameRect.h = medium_height;
-        fRect.y = WIN_PANEL + 3;
+        fRect.y = LINUX_PANEL;
         fRect.w = 280 - fRect.x;
         fRect.h = 365 - fRect.y;
     } else if (size == large) {
         frameRect.w = large_width;
         frameRect.h = large_height;
-        fRect.y = WIN_PANEL + 3;
+        fRect.y = LINUX_PANEL;
         fRect.w = 503 - fRect.x;
         fRect.h = 365 - fRect.y;
     }

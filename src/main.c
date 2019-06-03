@@ -34,6 +34,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
 
     auto struct SDL_Texture *frameTexture;
     auto struct SDL_Texture *tilesTexture;
+    auto struct SDL_Texture *menu_game_texture;
+    auto struct SDL_Texture *menu_help_texture;
 
     auto struct game_field field;
     auto enum field_size s = Get_Size(argv);
@@ -58,6 +60,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
         minesleft = mines_l(field.s);
         frameTexture = getTexture(renderer, (field.s == small) ? FRAME_PATH : (field.s == medium) ? MID_FRAME_PATH : LARGE_FRAME_PATH);
         tilesTexture = getTexture(renderer, TILES_PATH);
+        /*menu_game_texture = getTexture(renderer, MENU_GAME_PATH);
+        menu_help_texture = getTexture(renderer, MENU_HELP_PATH);*/
         while (!quit) {
             switch (field.g_state) {
                 case game_off: case game_start:
@@ -131,6 +135,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 } else if (is_hit_face(field.s, event.button.x, event.button.y)) {
                                     fc = face_pressed;
                                 }
+                                /* field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y);*/
                                 beg_fc = fc;
                             } else if (btn == mbtn_right) {
                                 btn = mbtn_mid;
@@ -217,9 +222,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
                 } else {
                     if (event.type == SDL_MOUSEBUTTONDOWN) {
                         if (event.button.button == SDL_BUTTON_LEFT) {
-                            btn = mbtn_left;
                             if (is_hit_face(field.s, event.button.x, event.button.y)) {
                                 fc = face_pressed;
+                                btn = mbtn_left;
                             }
                         }
                     } else if (event.type == SDL_MOUSEBUTTONUP) {
@@ -249,11 +254,17 @@ int main(int argc, const char *argv[], const char *envp[]) {
             if (is_start) {
                 currtime = SDL_GetTicks() + 1000 - starttime;
             }
+            if (currtime / 1000 == 999) {
+                is_start = __false;
+            }
             SDL_RenderClear(renderer);
             Check_for_win(&field, &minesleft);
             Draw_frame(renderer, frameTexture, field.s);
             Draw_field(renderer, tilesTexture, &field);
             Draw_timerface(renderer, tilesTexture, s, (currtime / 1000), minesleft, fc);
+            /*if (field.m_state != menu_off) {
+                Show_menu();
+            }*/
             SDL_RenderPresent(renderer);
             SDL_Delay(DELAY_TIME);
         }
