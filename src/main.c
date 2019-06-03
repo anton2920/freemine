@@ -32,8 +32,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
     auto struct SDL_Window *window;
     auto struct SDL_Renderer *renderer;
 
-    auto struct SDL_Texture *frameTexture;
-    auto struct SDL_Texture *tilesTexture;
+    auto struct SDL_Texture *frameTexture = NULL;
+    auto struct SDL_Texture *tilesTexture = NULL;
     auto struct SDL_Texture *menu_game_texture;
     auto struct SDL_Texture *menu_help_texture;
 
@@ -135,7 +135,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 } else if (is_hit_face(field.s, event.button.x, event.button.y)) {
                                     fc = face_pressed;
                                 }
-                                /* field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y);*/
+                                /* field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y); */
                                 beg_fc = fc;
                             } else if (btn == mbtn_right) {
                                 btn = mbtn_mid;
@@ -274,6 +274,10 @@ int main(int argc, const char *argv[], const char *envp[]) {
 
     /* Releasing memory */
     Field_destroy(&field, s);
+    SDL_DestroyTexture(frameTexture);
+    SDL_DestroyTexture(tilesTexture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
     Mix_Quit();
     TTF_Quit();
     SDL_Quit();

@@ -11,8 +11,6 @@ stdio.h
 -
 stdlib.h
 -
-STL.h
--
 assert.h
 -
 time.h
@@ -26,7 +24,23 @@ SDL2/SDL_ttf.h
 SDL2/SDL_mixer.h
 -
 
+/home/anton/mine/src/libs/draw.c
+../headers/mines.h
+/home/anton/mine/src/headers/mines.h
+
+/home/anton/mine/src/libs/help_routines.c
+../headers/mines.h
+/home/anton/mine/src/headers/mines.h
+
+/home/anton/mine/src/libs/menu.c
+../headers/mines.h
+/home/anton/mine/src/headers/mines.h
+
 /home/anton/mine/src/libs/mines.c
 ../headers/mines.h
+/home/anton/mine/src/headers/mines.h
+
+/home/anton/mine/src/main.c
+headers/mines.h
 /home/anton/mine/src/headers/mines.h
 

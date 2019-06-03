@@ -24,7 +24,6 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 /* Include standard headers */
 #include <stdio.h>
 #include <stdlib.h>
-#include <STL.h>
 #include <assert.h>
 #include <time.h>
 
@@ -38,7 +37,7 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #ifndef TITLE
     #define TITLE ("FreeMine")
 #endif
-#define DELAY_TIME (60)
+#define DELAY_TIME (30)
 #define WIN_PANEL (20)
 #define LINUX_PANEL (WIN_PANEL + 3)
 #define LYAGUSHA (6585) /* For Samara's Voenkomat */
@@ -51,6 +50,15 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #define MENU_HELP_PATH ("../files/menu_help.png")
 
 /* Data types */
+#ifndef __BOOL_TYPE
+    #define __BOOL_TYPE
+    typedef enum {
+        __false,
+        __true
+    } __bool;
+#endif
+
+
 enum field_size {
     small,
     medium,

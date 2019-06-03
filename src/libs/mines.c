@@ -161,7 +161,7 @@ void Check_for_win(struct game_field *fld, int *minesleft) {
         }
     }
 
-    if (!*minesleft) {
+    if (*minesleft) {
         for (i = 0; i < fld->tiles_y; ++i) {
             for (j = 0; j < fld->tiles_x; ++j) {
                 if (fld->fld[i][j].check != pressed && fld->fld[i][j].check != flaggy && fld->fld[i][j].type == miny) {
@@ -170,9 +170,9 @@ void Check_for_win(struct game_field *fld, int *minesleft) {
                 }
             }
         }
+    } else {
+        fld->g_state = game_win;
     }
-
-    fld->g_state = game_win;
 }
 
 void Mine_searcher(struct game_field *fld, block *obj) {
