@@ -320,6 +320,7 @@ void two_btns(struct game_field *, int, int);
 void Menu_state_init(struct game_field *, struct menu_state *);
 void Play_music(Mix_Music **fon, char *name);
 void Play_click_sound(struct Mix_Chunk *Sound);
+void Remove_questions(struct game_field *);
 
 /* draw.c */
 struct SDL_Texture *getTexture(struct SDL_Renderer *, char *name);

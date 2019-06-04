@@ -261,3 +261,18 @@ void Play_click_sound(struct Mix_Chunk *Sound) {
     /* Main part */
     Mix_PlayChannel(-1, Sound, 0);
 }
+
+void Remove_questions(struct game_field *fld) {
+
+    /* Initializing variables */
+    auto int i, j;
+
+    /* Main part */
+    for (i = 0; i < fld->tiles_y; ++i) {
+        for (j = 0; j < fld->tiles_x; ++j) {
+            if (fld->fld[i][j].check == question) {
+                fld->fld[i][j].check = unchecked;
+            }
+        }
+    }
+}
