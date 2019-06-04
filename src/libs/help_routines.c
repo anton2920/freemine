@@ -77,8 +77,6 @@ __bool Field_init(struct game_field *fld, enum field_size s) {
 
     fld->g_state = game_off;
     fld->m_state = menu_off;
-    fld->is_mks_on = __true;
-    fld->is_snd_on = __false;
 
     if ((fld->fld = (block **) malloc(fld->tiles_y * sizeof(block *))) == NULL) {
         return __false;
@@ -240,9 +238,9 @@ void Menu_state_init(struct game_field *fld, struct menu_state *st) {
     st->menu_i_intermediate = (fld->s == medium) ? __true : __false;
     st->menu_i_advanced = (fld->s == large) ? __true : __false;
 
-    st->menu_i_marks = __true;
-    st->menu_i_color = __true;
-    st->menu_i_sound = __false;
+    st->menu_i_marks = fld->is_mks_on;
+    st->menu_i_color = fld->is_clr_on;
+    st->menu_i_sound = fld->is_snd_on;
 
     st->is_hovered = NOT_HOVERED;
 }

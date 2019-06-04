@@ -1,9 +1,9 @@
 #include "../headers/mines.h"
 
-enum menu_panel Is_menu_pressed(struct game_field *fld, int x, int y, int pr_u, enum menu_panel press_change) {
+enum menu_panel Is_menu_pressed(struct game_field *fld, int x, int y, int pr_u) {
 
     /* Initializing variables */
-    auto enum menu_panel mp = menu_off, local_test = menu_off;
+    auto enum menu_panel mp = menu_off;
 
     /* Main part */
     if (fld->s == small) {
@@ -16,8 +16,6 @@ enum menu_panel Is_menu_pressed(struct game_field *fld, int x, int y, int pr_u, 
         mp = (x >= large_menu_game_x_offset && x <= large_menu_game_x_offset + menu_btn_w &&
                 y >= large_menu_game_y_offset && y <= large_menu_game_y_offset + menu_btn_h) ? menu_game_pressed : menu_off;
     }
-
-
 
     if (mp == menu_game_pressed && pr_u == UNPRESS) {
         return mp;

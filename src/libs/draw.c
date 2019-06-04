@@ -107,12 +107,15 @@ void Draw_field(struct SDL_Renderer *renderer, struct SDL_Texture *fieldStuff, s
                     currT.y = pressed_y;
                 }
             }
+            if (!fld->is_clr_on) {
+                currT.x += BW_OFFSET;
+            }
             SDL_RenderCopy(renderer, fieldStuff, &currT, &bTile);
         }
     }
 }
 
-void Draw_timerface(struct SDL_Renderer *renderer, struct SDL_Texture *timerText,
+void Draw_timerface(struct SDL_Renderer *renderer, struct game_field *fld, struct SDL_Texture *timerText,
         enum field_size size, size_t currtime, int minesleft, enum face_state fc) {
 
     /* Initializing variables */
@@ -149,6 +152,9 @@ void Draw_timerface(struct SDL_Renderer *renderer, struct SDL_Texture *timerText
     for (i = 3; i > 0; --i, currtime /= 10, bTile.x -= digit_w) {
         digit = currtime % 10;
         currT.x = digit * digit_w;
+        if (!fld->is_clr_on) {
+            currT.x += BW_OFFSET;
+        }
         SDL_RenderCopy(renderer, timerText, &currT, &bTile);
     }
 
@@ -158,6 +164,9 @@ void Draw_timerface(struct SDL_Renderer *renderer, struct SDL_Texture *timerText
         for (i = 3; i > 0; --i, minesleft /= 10, bTile.x -= digit_w) {
             digit = minesleft % 10;
             currT.x = digit * digit_w;
+            if (!fld->is_clr_on) {
+                currT.x += BW_OFFSET;
+            }
             SDL_RenderCopy(renderer, timerText, &currT, &bTile);
         }
     } else {
@@ -165,9 +174,15 @@ void Draw_timerface(struct SDL_Renderer *renderer, struct SDL_Texture *timerText
         for (i = 2; i > 0; --i, minesleft /= 10, bTile.x -= digit_w) {
             digit = minesleft % 10;
             currT.x = digit * digit_w;
+            if (!fld->is_clr_on) {
+                currT.x += BW_OFFSET;
+            }
             SDL_RenderCopy(renderer, timerText, &currT, &bTile);
         }
         currT.x = 10 * digit_w;
+        if (!fld->is_clr_on) {
+            currT.x += BW_OFFSET;
+        }
         SDL_RenderCopy(renderer, timerText, &currT, &bTile);
     }
 
@@ -183,6 +198,9 @@ void Draw_timerface(struct SDL_Renderer *renderer, struct SDL_Texture *timerText
                 face_cool_x_offset;
     currT.w = bTile.w;
     currT.h = bTile.h;
+    if (!fld->is_clr_on) {
+        currT.x += BW_OFFSET;
+    }
     SDL_RenderCopy(renderer, timerText, &currT, &bTile);
 }
 

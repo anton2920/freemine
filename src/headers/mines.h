@@ -37,7 +37,7 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #ifndef TITLE
     #define TITLE ("FreeMine")
 #endif
-#define DELAY_TIME (10)
+#define DELAY_TIME (30)
 #define WIN_PANEL (20)
 #define LINUX_PANEL (WIN_PANEL + 3)
 #ifndef BAD_EXIT_CODE
@@ -52,7 +52,7 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #define FRAME_PATH ("../files/winmine1.gif")
 #define MID_FRAME_PATH ("../files/mid_frame1.png")
 #define LARGE_FRAME_PATH ("../files/large_frame1.png")
-#define TILES_PATH ("../files/sprite.png")
+#define TILES_PATH ("../files/sprite1.png")
 #define MENU_GAME_PATH ("../files/menu_game.png")
 #define SELECTED_MENU_PATH ("../files/selected_menu.png")
 
@@ -189,7 +189,8 @@ enum png_offset {
     mine_black_x = 64,
     tick_x_offset = 140,
     tick_black_y_offset = 49,
-    tick_white_y_offset = 77
+    tick_white_y_offset = 77,
+    BW_OFFSET = 160
 };
 
 enum digit_s {
@@ -293,6 +294,7 @@ struct game_field {
     enum game_state g_state;
     enum menu_panel m_state;
     __bool is_mks_on;
+    __bool is_clr_on;
     __bool is_snd_on;
 };
 
@@ -318,7 +320,7 @@ void Play_click_sound(struct Mix_Chunk *Sound);
 struct SDL_Texture *getTexture(struct SDL_Renderer *, char *name);
 void Draw_frame(struct SDL_Renderer *, struct SDL_Texture *, enum field_size);
 void Draw_field(struct SDL_Renderer *, struct SDL_Texture *, struct game_field *);
-void Draw_timerface(struct SDL_Renderer *, struct SDL_Texture *, enum field_size, size_t, int, enum face_state);
+void Draw_timerface(struct SDL_Renderer *, struct game_field *, struct SDL_Texture *, enum field_size, size_t, int, enum face_state);
 void Draw_menu(struct SDL_Renderer *, struct game_field *, struct menu_state *,
                struct SDL_Texture *menu_game, struct SDL_Texture *select, struct SDL_Texture *tiles);
 
@@ -332,7 +334,7 @@ void Check_for_win(struct game_field *, int *);
 void Mine_searcher(struct game_field *, block *);
 
 /* menu.c */
-enum menu_panel Is_menu_pressed(struct game_field *, int, int, int, enum menu_panel);
+enum menu_panel Is_menu_pressed(struct game_field *fld, int x, int y, int pr_u);
 __bool Check_hover(enum field_size, struct menu_state *, int x, int y);
 int Process_menu_press(struct menu_state *);
 

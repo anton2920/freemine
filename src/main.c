@@ -35,7 +35,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
     auto struct SDL_Texture *menu_texture = NULL;
     auto struct SDL_Texture *selectTexture = NULL;
 
-    auto struct game_field field;
+    auto struct game_field field = {NULL, 0, 0, small, game_off, menu_off, __true, __true, __false};
     auto enum field_size s = Get_Size(argc, argv);
     auto struct menu_state m_state;
     auto int menu_press_state = -1;
@@ -49,7 +49,6 @@ int main(int argc, const char *argv[], const char *envp[]) {
     auto block *curr_block;
     auto enum check_type ch = unchecked;
     auto enum mbtn btn = mbtn_no_btn;
-    auto enum menu_panel ch_state = menu_off;
 
     auto struct Mix_Chunk *click = NULL;
     auto Mix_Music *mus = NULL;
@@ -146,7 +145,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                     fc = face_pressed;
                                 }
                                 if (field.m_state == menu_off || !Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
-                                    ch_state = field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, PRESS, ch_state);
+                                    field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, PRESS);
                                 }
                                 beg_fc = fc;
                             } else if (btn == mbtn_right) {
@@ -211,7 +210,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 } else if (menu_press_state == 4) {
                                     field.is_mks_on = m_state.menu_i_marks;
                                 } else if (menu_press_state == 5) {
-                                    /* Colorless */
+                                    field.is_clr_on = m_state.menu_i_color;
                                 } else if (menu_press_state == 6) {
                                     field.is_snd_on = m_state.menu_i_sound;
                                     if (field.is_snd_on) {
@@ -225,7 +224,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                     quit = __true;
                                     break;
                                 }
-                                field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, UNPRESS, ch_state);
+                                field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, UNPRESS);
                             } else if (curr_block != NULL && beg_fc == face_o) {
                                 if (curr_block->check != flaggy && curr_block->check != pressed) {
                                     if (field.g_state == game_off) {
@@ -256,6 +255,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
                             if (curr_block != NULL) {
                                 if (field.g_state == game_start) {
                                     Mine_searcher(&field, curr_block);
+                                    if (field.is_snd_on) {
+                                        Play_click_sound(click);
+                                    }
                                 }
                                 if (!is_start) {
                                     starttime = SDL_GetTicks();
@@ -307,8 +309,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 fc = face_pressed;
                                 btn = mbtn_left;
                             }
-                            if (field.m_state == menu_off) {
-                                ch_state = field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, PRESS, ch_state);
+                            if (field.m_state == menu_off || !Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
+                                field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, PRESS);
                             }
                         }
                     } else if (event.type == SDL_MOUSEBUTTONUP) {
@@ -321,6 +323,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 minesleft = mines_l(field.s);
                                 fc = face_normal;
                                 beg_fc = fc;
+                                if (field.is_snd_on) {
+                                    Play_click_sound(click);
+                                }
                             } else if (field.m_state == menu_game_pressed && Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
                                 if (!(menu_press_state = Process_menu_press(&m_state))) {
                                     Field_init(&field, s);
@@ -368,7 +373,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 } else if (menu_press_state == 4) {
                                     field.is_mks_on = m_state.menu_i_marks;
                                 } else if (menu_press_state == 5) {
-                                    /* Colorless */
+                                    field.is_clr_on = m_state.menu_i_color;
                                 } else if (menu_press_state == 6) {
                                     field.is_snd_on = m_state.menu_i_sound;
                                     if (field.is_snd_on) {
@@ -382,9 +387,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                     quit = __true;
                                     break;
                                 }
+                                field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, UNPRESS);
                             }
-
-                            field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, UNPRESS, ch_state);
                         }
                         btn = mbtn_no_btn;
                     } else if (event.type == SDL_MOUSEMOTION) {
@@ -421,7 +425,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
             Check_for_win(&field, &minesleft);
             Draw_frame(renderer, frameTexture, field.s);
             Draw_field(renderer, tilesTexture, &field);
-            Draw_timerface(renderer, tilesTexture, s, (currtime / 1000), minesleft, fc);
+            Draw_timerface(renderer, &field, tilesTexture, s, (currtime / 1000), minesleft, fc);
             if (field.m_state != menu_off) {
                 Draw_menu(renderer, &field, &m_state, menu_texture, selectTexture, tilesTexture);
             }

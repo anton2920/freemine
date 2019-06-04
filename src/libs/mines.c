@@ -155,7 +155,7 @@ void Check_for_win(struct game_field *fld, int *minesleft) {
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
             if ((fld->fld[i][j].check != pressed && fld->fld[i][j].check != flaggy &&
-                fld->fld[i][j].type != miny && *minesleft) || fld->fld[i][j].type == miny_red) {
+                fld->fld[i][j].type != miny) || fld->fld[i][j].type == miny_red) {
                 return;
             }
         }
