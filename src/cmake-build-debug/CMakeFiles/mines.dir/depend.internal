@@ -7,6 +7,9 @@ CMakeFiles/mines.dir/libs/draw.c.o
 CMakeFiles/mines.dir/libs/help_routines.c.o
  /home/anton/mine/src/headers/mines.h
  /home/anton/mine/src/libs/help_routines.c
+CMakeFiles/mines.dir/libs/lead.c.o
+ /home/anton/mine/src/headers/mines.h
+ /home/anton/mine/src/libs/lead.c
 CMakeFiles/mines.dir/libs/menu.c.o
  /home/anton/mine/src/headers/mines.h
  /home/anton/mine/src/libs/menu.c

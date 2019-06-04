@@ -53,6 +53,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
     auto struct Mix_Chunk *click = NULL;
     auto Mix_Music *mus = NULL;
 
+    auto struct person records[3] = {};
+
     /* Main part. SDL2 */
     srand(time(NULL) / 2);
     SDL_Init_All();
@@ -219,7 +221,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                         Mix_FreeMusic(mus);
                                     }
                                 } else if (menu_press_state == 7) {
-                                    /* Table of records */
+                                    Print_Records(records);
                                 } else if (menu_press_state == 8) {
                                     quit = __true;
                                     break;
@@ -382,7 +384,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                         Mix_FreeMusic(mus);
                                     }
                                 } else if (menu_press_state == 7) {
-                                    /* Table of records */
+                                    Print_Records(records);
                                 } else if (menu_press_state == 8) {
                                     quit = __true;
                                     break;
@@ -412,6 +414,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
                         minesleft = mines_l(field.s);
                         fc = face_normal;
                         beg_fc = fc;
+                    } else if (event.key.keysym.sym == SDLK_w) {
+                        field.g_state = game_win;
                     }
                 }
             }
@@ -430,6 +434,11 @@ int main(int argc, const char *argv[], const char *envp[]) {
                 Draw_menu(renderer, &field, &m_state, menu_texture, selectTexture, tilesTexture);
             }
             SDL_RenderPresent(renderer);
+            if (field.g_state == game_win) {
+                if (Check_Records(records, field.s, currtime / 1000)) {
+                    Print_Records(records);
+                }
+            }
             SDL_Delay(DELAY_TIME);
         }
     } else {

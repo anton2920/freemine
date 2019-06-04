@@ -177,6 +177,33 @@ libs/help_routines.c.s:
 	$(MAKE) -f CMakeFiles/mines.dir/build.make CMakeFiles/mines.dir/libs/help_routines.c.s
 .PHONY : libs/help_routines.c.s
 
+libs/lead.o: libs/lead.c.o
+
+.PHONY : libs/lead.o
+
+# target to build an object file
+libs/lead.c.o:
+	$(MAKE) -f CMakeFiles/mines.dir/build.make CMakeFiles/mines.dir/libs/lead.c.o
+.PHONY : libs/lead.c.o
+
+libs/lead.i: libs/lead.c.i
+
+.PHONY : libs/lead.i
+
+# target to preprocess a source file
+libs/lead.c.i:
+	$(MAKE) -f CMakeFiles/mines.dir/build.make CMakeFiles/mines.dir/libs/lead.c.i
+.PHONY : libs/lead.c.i
+
+libs/lead.s: libs/lead.c.s
+
+.PHONY : libs/lead.s
+
+# target to generate assembly for a file
+libs/lead.c.s:
+	$(MAKE) -f CMakeFiles/mines.dir/build.make CMakeFiles/mines.dir/libs/lead.c.s
+.PHONY : libs/lead.c.s
+
 libs/menu.o: libs/menu.c.o
 
 .PHONY : libs/menu.o
@@ -273,6 +300,9 @@ help:
 	@echo "... libs/help_routines.o"
 	@echo "... libs/help_routines.i"
 	@echo "... libs/help_routines.s"
+	@echo "... libs/lead.o"
+	@echo "... libs/lead.i"
+	@echo "... libs/lead.s"
 	@echo "... libs/menu.o"
 	@echo "... libs/menu.i"
 	@echo "... libs/menu.s"

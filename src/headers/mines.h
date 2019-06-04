@@ -25,6 +25,7 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include <time.h>
 
 /* SDL2 */
@@ -43,6 +44,7 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #ifndef BAD_EXIT_CODE
     #define BAD_EXIT_CODE (-1)
 #endif
+#define NAME_SIZE (20)
 #define PRESS (1)
 #define UNPRESS (2)
 #define NOT_HOVERED (-1)
@@ -58,8 +60,6 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 
 #define MUS_PATH ("../files/mus.mp3")
 #define CLICK_SND_PATH ("../files/click.wav")
-
-#define RECORDS_PATH ("../files/records.bin")
 
 /* Data types */
 #ifndef __BOOL_TYPE
@@ -298,6 +298,11 @@ struct game_field {
     __bool is_snd_on;
 };
 
+struct person {
+    char name[NAME_SIZE];
+    int time;
+};
+
 /* Function declarations */
 
 /* help_routines.c */
@@ -337,5 +342,12 @@ void Mine_searcher(struct game_field *, block *);
 enum menu_panel Is_menu_pressed(struct game_field *fld, int x, int y, int pr_u);
 __bool Check_hover(enum field_size, struct menu_state *, int x, int y);
 int Process_menu_press(struct menu_state *);
+
+/* lead.c */
+void Write_Records(struct person *p);
+void Read_Records(struct person *p);
+__bool Check_Records(struct person *p, enum field_size s, int time);
+void Print_Records(struct person *p);
+void New_Record(struct person *p, enum field_size s, int time);
 
 #endif
