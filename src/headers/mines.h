@@ -352,3 +352,5 @@ void Print_Records(struct person *p);
 void New_Record(struct person *p, enum field_size s, int time);
 
 #endif
+
+/* 1859 lines */

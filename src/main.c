@@ -420,8 +420,10 @@ int main(int argc, const char *argv[], const char *envp[]) {
                         minesleft = mines_l(field.s);
                         fc = face_normal;
                         beg_fc = fc;
-                    } else if (event.key.keysym.sym == SDLK_w) {
+                    } else if (event.key.keysym.sym == SDLK_w && field.g_state != game_lose) {
                         field.g_state = game_win;
+                        fc = face_cool;
+                        beg_fc = fc;
                     }
                 }
             }
