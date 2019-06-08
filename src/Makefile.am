@@ -8,7 +8,7 @@ bin_PROGRAMS = FreeMine
 FreeMine_SOURCES = main.c
 
 FreeMine_CPPFLAGS = $(CFLAGS) -Wall -Wextra -std=c90
-FreeMine_LDADD = libmainmenu.la
+FreeMine_LDADD = libfreemine_main.la
 FreeMine_LDFLAGS = $(LDFLAGS)
 
 include_HEADERS = headers/mines.h

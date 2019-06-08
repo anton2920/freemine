@@ -1,1 +1,1 @@
-man_MANS = ProCalc.1
+man_MANS = FreeMine.1

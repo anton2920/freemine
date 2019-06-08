@@ -29,8 +29,20 @@ AC_ENABLE_SHARED
 AC_PROG_LIBTOOL
 
 # Check for SDL2
-AC_SEARCH_LIBS([SDL_Init], [SDL2 SDL SDL2_image SDL2_ttf SDL2_mixer m], [], [
-	AC_MSG_ERROR([SDL is required to compile and run this game])
+AC_SEARCH_LIBS([SDL_Init], [SDL2], [], [
+	AC_MSG_ERROR([SDL2 is required to compile and run this game])
+	])
+
+AC_SEARCH_LIBS([IMG_Load], [SDL2_image], [], [
+	AC_MSG_ERROR([SDL2_image is required to compile and run this game])
+	])
+
+AC_SEARCH_LIBS([TTF_Init], [SDL2_ttf], [], [
+	AC_MSG_ERROR([SDL2_ttf is required to compile and run this game])
+	])
+
+AC_SEARCH_LIBS([Mix_Init], [SDL2_mixer], [], [
+	AC_MSG_ERROR([SDL2_mixer is required to compile and run this game])
 	])
 
 AC_CHECK_HEADERS([SDL2/SDL.h], [], [])
@@ -75,8 +87,8 @@ AC_OUTPUT
 echo 
 echo " ---------------------------------"
 echo "| Options used to compile and link:"
-echo "| CXX           = $CXX"
-echo "| CXXFLAGS      = $CXXFLAGS"
+echo "| CC            = $CC"
+echo "| CFLAGS        = $CFLAGS"
 echo "| LDFLAGS       = $LDFLAGS"
 echo "| ARFLAGS       = $ARFLAGS"
 echo " ---------------------------------"
