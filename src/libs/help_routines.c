@@ -261,3 +261,60 @@ void Play_click_sound(struct Mix_Chunk *Sound) {
     /* Main part */
     Mix_PlayChannel(-1, Sound, 0);
 }
+
+void Remove_questions(struct game_field *fld) {
+
+    /* Initializing variables */
+    auto int i, j;
+
+    /* Main part */
+    for (i = 0; i < fld->tiles_y; ++i) {
+        for (j = 0; j < fld->tiles_x; ++j) {
+            if (fld->fld[i][j].check == question) {
+                fld->fld[i][j].check = unchecked;
+            }
+        }
+    }
+}
+
+void Open_field(struct game_field *fld, int *currm) {
+
+    /* Initializing variables */
+    auto int i, j;
+
+    /* Main part */
+    for (i = 0; i < fld->tiles_y; ++i) {
+        for (j = 0; j < fld->tiles_x; ++j) {
+            if (fld->fld[i][j].type != miny) {
+                fld->fld[i][j].check = pressed;
+            }
+        }
+    }
+
+    Check_for_win(fld, currm);
+}
+
+__bool R_u_s(void) {
+
+    /* Initializing variables */
+    auto int func;
+
+    /* I/O flow */
+    printf("Are you sure you want to cheat and win? [Y/n]: ");
+    func = getchar();
+
+    /* Main part */
+    if (func == 'Y' || func == 'y' || func == '\n') {
+        if (func != '\n') {
+            while (getchar() != '\n')
+                ;
+        }
+    } else {
+        while (getchar() != '\n')
+            ;
+        return __false;
+    }
+
+    /* Returning value */
+    return __true;
+}

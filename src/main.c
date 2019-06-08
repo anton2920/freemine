@@ -211,6 +211,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                     }
                                 } else if (menu_press_state == 4) {
                                     field.is_mks_on = m_state.menu_i_marks;
+                                    if (field.is_mks_on == __false) {
+                                        Remove_questions(&field);
+                                    }
                                 } else if (menu_press_state == 5) {
                                     field.is_clr_on = m_state.menu_i_color;
                                 } else if (menu_press_state == 6) {
@@ -374,6 +377,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                     }
                                 } else if (menu_press_state == 4) {
                                     field.is_mks_on = m_state.menu_i_marks;
+                                    if (field.is_mks_on == __false) {
+                                        Remove_questions(&field);
+                                    }
                                 } else if (menu_press_state == 5) {
                                     field.is_clr_on = m_state.menu_i_color;
                                 } else if (menu_press_state == 6) {
@@ -415,7 +421,9 @@ int main(int argc, const char *argv[], const char *envp[]) {
                         fc = face_normal;
                         beg_fc = fc;
                     } else if (event.key.keysym.sym == SDLK_w) {
-                        field.g_state = game_win;
+                        if (R_u_s() && field.g_state != game_lose) {
+                            Open_field(&field, &minesleft);
+                        }
                     }
                 }
             }
