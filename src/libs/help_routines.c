@@ -37,21 +37,21 @@ __bool Init_window(struct SDL_Window **window, struct SDL_Renderer **renderer,
 
     /* Main part */
     if (s == small) {
-        if ((*window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, small_width, small_height, SDL_WINDOW_SHOWN)) < 0) {
+        if ((*window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, small_width, small_height, SDL_WINDOW_SHOWN)) == NULL) {
             return __false;
-        } else if (!(*renderer = SDL_CreateRenderer(*window, -1, 0))) {
+        } else if ((*renderer = SDL_CreateRenderer(*window, -1, 0)) == NULL) {
             return __false;
         }
     } else if (s == medium) {
-        if ((*window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, medium_width, medium_height, SDL_WINDOW_SHOWN)) < 0) {
+        if ((*window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, medium_width, medium_height, SDL_WINDOW_SHOWN)) == NULL) {
             return __false;
-        } else if (!(*renderer = SDL_CreateRenderer(*window, -1, 0))) {
+        } else if ((*renderer = SDL_CreateRenderer(*window, -1, 0)) == NULL) {
             return __false;
         }
     } else if (s == large) {
-        if ((*window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, large_width, large_height, SDL_WINDOW_SHOWN)) < 0) {
+        if ((*window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, large_width, large_height, SDL_WINDOW_SHOWN)) == NULL) {
             return __false;
-        } else if (!(*renderer = SDL_CreateRenderer(*window, -1, 0))) {
+        } else if ((*renderer = SDL_CreateRenderer(*window, -1, 0)) == NULL) {
             return __false;
         }
     }
