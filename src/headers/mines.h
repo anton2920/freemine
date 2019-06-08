@@ -21,15 +21,32 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #ifndef SRC_MINES_H
 #define SRC_MINES_H
 
+/* Include config header */
+#include "FreeMine_config.h"
+
 /* Include standard headers */
-#include <stdio.h>
+#if (HAVE_STDIO_H == 1)
+    #include <stdio.h>
+#endif
+#if (HAVE_STDLIB_H == 1)
 #include <stdlib.h>
-#include <assert.h>
-#include <string.h>
-#include <time.h>
+#endif
+#if (HAVE_ASSERT_H == 1)
+    #include <assert.h>
+#endif
+#if (HAVE_STRING_H == 1)
+    #include <string.h>
+#endif
+#if (HAVE_TIME_H == 1)
+    #include <time.h>
+#endif
 
 /* SDL2 */
-#include <SDL2/SDL.h>
+#if (HAVE_SDL2_SDL_H)
+    #include <SDL2/SDL.h>
+#elif (HAVE_SDL_H)
+    #include <SDL.h>
+#endif
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
