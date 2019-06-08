@@ -164,6 +164,9 @@ enum check_type switch_block_check_type(block *blk, enum mbtn b, __bool is_mks) 
             blk->check = pressed;
         }
     }
+
+    /* Returning value */
+    return blk->check;
 }
 
 void Block_untoggle_hovered(struct game_field *fld) {

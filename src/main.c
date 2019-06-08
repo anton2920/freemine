@@ -19,10 +19,21 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "headers/mines.h"
+#define KIB (1024)
 
 int main(int argc, const char *argv[], const char *envp[]) {
 
     /* Initializing variables */
+#ifdef _WIN32
+    ;
+#endif
+#ifdef __unix__
+    auto char hp[KIB] = {}, hp1[KIB] = {};
+    strcat(hp, getenv("HOME"));
+    strcat(hp, "/.local/share/FreeMine/");
+    strcpy(hp1, hp);
+#endif
+
     auto __bool quit = __false;
     auto union SDL_Event event, new_event;
     auto int get_ev = 0;
@@ -65,11 +76,16 @@ int main(int argc, const char *argv[], const char *envp[]) {
         Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);
         Menu_state_init(&field, &m_state);
         minesleft = mines_l(field.s);
-        frameTexture = getTexture(renderer, (field.s == small) ? FRAME_PATH : (field.s == medium) ? MID_FRAME_PATH : LARGE_FRAME_PATH);
-        tilesTexture = getTexture(renderer, TILES_PATH);
-        menu_texture = getTexture(renderer, MENU_GAME_PATH);
-        selectTexture = getTexture(renderer, SELECTED_MENU_PATH);
-        click = Mix_LoadWAV(CLICK_SND_PATH);
+        frameTexture = getTexture(renderer, (field.s == small) ? strcat(hp1, FRAME_PATH) : (field.s == medium) ? strcat(hp1, MID_FRAME_PATH) : strcat(hp1, LARGE_FRAME_PATH));
+        strcpy(hp1, hp);
+        tilesTexture = getTexture(renderer, strcat(hp1, TILES_PATH));
+        strcpy(hp1, hp);
+        menu_texture = getTexture(renderer, strcat(hp1, MENU_GAME_PATH));
+        strcpy(hp1, hp);
+        selectTexture = getTexture(renderer, strcat(hp1, SELECTED_MENU_PATH));
+        strcpy(hp1, hp);
+        click = Mix_LoadWAV(strcat(hp1, CLICK_SND_PATH));
+        strcpy(hp1, hp);
         while (!quit) {
             switch (field.g_state) {
                 case game_off: case game_start:
@@ -201,10 +217,14 @@ int main(int argc, const char *argv[], const char *envp[]) {
 
                                         Menu_state_init(&field, &m_state);
                                         minesleft = mines_l(field.s);
-                                        frameTexture = getTexture(renderer, (field.s == small) ? FRAME_PATH : (field.s == medium) ? MID_FRAME_PATH : LARGE_FRAME_PATH);
-                                        tilesTexture = getTexture(renderer, TILES_PATH);
-                                        menu_texture = getTexture(renderer, MENU_GAME_PATH);
-                                        selectTexture = getTexture(renderer, SELECTED_MENU_PATH);
+                                        frameTexture = getTexture(renderer, (field.s == small) ? strcat(hp1, FRAME_PATH) : (field.s == medium) ? strcat(hp1, MID_FRAME_PATH) : strcat(hp1, LARGE_FRAME_PATH));
+                                        strcpy(hp1, hp);
+                                        tilesTexture = getTexture(renderer, strcat(hp1, TILES_PATH));
+                                        strcpy(hp1, hp);
+                                        menu_texture = getTexture(renderer, strcat(hp1, MENU_GAME_PATH));
+                                        strcpy(hp1, hp);
+                                        selectTexture = getTexture(renderer, strcat(hp1, SELECTED_MENU_PATH));
+                                        strcpy(hp1, hp);
                                         continue;
                                     } else {
                                         fprintf(stderr, "Error! Something went wrong: %s\n", SDL_GetError());
@@ -219,7 +239,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 } else if (menu_press_state == 6) {
                                     field.is_snd_on = m_state.menu_i_sound;
                                     if (field.is_snd_on) {
-                                        Play_music(&mus, MUS_PATH);
+                                        Play_music(&mus, strcat(hp1, MUS_PATH));
+                                        strcpy(hp1, hp);
                                     } else {
                                         Mix_FreeMusic(mus);
                                     }
@@ -367,10 +388,14 @@ int main(int argc, const char *argv[], const char *envp[]) {
 
                                         Menu_state_init(&field, &m_state);
                                         minesleft = mines_l(field.s);
-                                        frameTexture = getTexture(renderer, (field.s == small) ? FRAME_PATH : (field.s == medium) ? MID_FRAME_PATH : LARGE_FRAME_PATH);
-                                        tilesTexture = getTexture(renderer, TILES_PATH);
-                                        menu_texture = getTexture(renderer, MENU_GAME_PATH);
-                                        selectTexture = getTexture(renderer, SELECTED_MENU_PATH);
+                                        frameTexture = getTexture(renderer, (field.s == small) ? strcat(hp1, FRAME_PATH) : (field.s == medium) ? strcat(hp1, MID_FRAME_PATH) : strcat(hp1, LARGE_FRAME_PATH));
+                                        strcpy(hp1, hp);
+                                        tilesTexture = getTexture(renderer, strcat(hp1, TILES_PATH));
+                                        strcpy(hp1, hp);
+                                        menu_texture = getTexture(renderer, strcat(hp1, MENU_GAME_PATH));
+                                        strcpy(hp1, hp);
+                                        selectTexture = getTexture(renderer, strcat(hp1, SELECTED_MENU_PATH));
+                                        strcpy(hp1, hp);
                                         continue;
                                     } else {
                                         fprintf(stderr, "Error! Something went wrong: %s\n", SDL_GetError());
@@ -385,7 +410,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 } else if (menu_press_state == 6) {
                                     field.is_snd_on = m_state.menu_i_sound;
                                     if (field.is_snd_on) {
-                                        Play_music(&mus, MUS_PATH);
+                                        Play_music(&mus, strcat(hp1, MUS_PATH));
+                                        strcpy(hp1, hp);
                                     } else {
                                         Mix_FreeMusic(mus);
                                     }
