@@ -11,7 +11,7 @@ FreeMine_CPPFLAGS = $(CFLAGS) -Wall -Wextra -std=c90
 FreeMine_LDADD = libfreemine_main.la
 FreeMine_LDFLAGS = $(LDFLAGS)
 
-include_HEADERS = headers/mines.h
+include_HEADERS = headers/mines.h headers/FreeMine_config.h
 
 lib_LTLIBRARIES = libfreemine_main.la
 
