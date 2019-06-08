@@ -21,11 +21,17 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #include "headers/mines.h"
 #define KIB (1024)
 
+#ifdef _WIN32
+	#undef main
+#endif
+
 int main(int argc, const char *argv[], const char *envp[]) {
 
     /* Initializing variables */
 #ifdef _WIN32
-    ;
+	auto char hp[KIB] = {0}, hp1[KIB] = {0};
+	strcpy(hp, "C:\\Users\\Public\\FreeMine");
+	strcpy(hp1, hp);
 #endif
 #ifdef __unix__
     auto char hp[KIB] = {}, hp1[KIB] = {};
@@ -64,7 +70,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
     auto struct Mix_Chunk *click = NULL;
     auto Mix_Music *mus = NULL;
 
-    auto struct person records[3] = {};
+    auto struct person records[3] = {0};
 
     /* Main part. SDL2 */
     srand(time(NULL) / 2);

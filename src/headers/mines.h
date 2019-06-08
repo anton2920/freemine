@@ -43,13 +43,13 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 
 /* SDL2 */
 #if (HAVE_SDL2_SDL_H)
-    #include <SDL2/SDL.h>
+    #include <SDL.h>
 #elif (HAVE_SDL_H)
     #include <SDL.h>
 #endif
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_mixer.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 /* Macros */
 #define CLION (0)
