@@ -23,7 +23,6 @@ src/.libs/
 src/FreeMine
 src/Makefile
 src/Makefile.in
-src/headers/FreeMine_config.h
 src/headers/FreeMine_config.h.in
 src/headers/stamp-h1
 src/libfreemine_main.la
