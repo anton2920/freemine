@@ -42,14 +42,22 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #endif
 
 /* SDL2 */
-#if (HAVE_SDL2_SDL_H)
+#ifdef _WIN32
     #include <SDL.h>
-#elif (HAVE_SDL_H)
-    #include <SDL.h>
+    #include <SDL_image.h>
+    #include <SDL_ttf.h>
+    #include <SDL_mixer.h>
 #endif
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
+#ifdef __unix__
+    #if (HAVE_SDL2_SDL_H)
+        #include <SDL2/SDL.h>
+    #elif (HAVE_SDL_H)
+        #include <SDL.h>
+    #endif
+    #include <SDL2/SDL_image.h>
+    #include <SDL2/SDL_ttf.h>
+    #include <SDL2/SDL_mixer.h>
+#endif
 
 /* Macros */
 #define CLION (0)
