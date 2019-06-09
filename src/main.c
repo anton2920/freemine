@@ -28,9 +28,10 @@ int main(int argc, const char *argv[], const char *envp[]) {
 
     /* Initializing variables */
 #ifdef _WIN32
-	#define KIB (256)
+	#define KIB (100)
 	auto char hp[KIB] = {0}, hp1[KIB] = {0};
-	strcpy(hp, "C:\\Users\\Public\\FreeMine\\");
+	strcpy(hp, "");
+	strcat(hp, "pics\\");
 	strcpy(hp1, hp);
 #endif
 #ifdef __unix__
