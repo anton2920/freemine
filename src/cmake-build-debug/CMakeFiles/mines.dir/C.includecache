@@ -21,6 +21,14 @@ string.h
 -
 time.h
 -
+SDL.h
+-
+SDL_image.h
+-
+SDL_ttf.h
+-
+SDL_mixer.h
+-
 SDL2/SDL.h
 -
 SDL.h
