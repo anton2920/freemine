@@ -12,6 +12,7 @@ sh ./autogen.sh
 make
 sudo make install
 ```
+After that, run `ldconfig(8)`. Do `sudo ldconfig`, there's no harm in it.
 
 ## Licence
 It distributes only under GPLv2 licence. Go to [https://www.gnu.org/licenses/] for more information
