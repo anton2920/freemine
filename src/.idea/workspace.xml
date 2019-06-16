@@ -11,7 +11,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="126335bf-2b34-4f2b-b94e-259a6d4a1221" name="Default Changelist" comment="" />
+    <list default="true" id="126335bf-2b34-4f2b-b94e-259a6d4a1221" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/cmake-build-release/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -54,9 +56,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="731">
               <caret line="43" selection-start-line="43" selection-end-line="43" />
-              <folding>
-                <element signature="e#900#901#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -70,10 +69,19 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/libs/mines.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="287">
+              <caret line="190" column="9" selection-start-line="190" selection-start-column="9" selection-end-line="190" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/libs/help_routines.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
+            <state relative-caret-position="2703">
               <caret line="159" column="13" selection-start-line="159" selection-start-column="13" selection-end-line="159" selection-end-column="13" />
             </state>
           </provider>
@@ -88,11 +96,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/headers/mines.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1955">
-              <caret line="115" column="18" lean-forward="true" selection-start-line="115" selection-start-column="18" selection-end-line="115" selection-end-column="18" />
+            <state relative-caret-position="391">
+              <caret line="23" column="27" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
               <folding>
                 <element signature="e#1166#1276#0" expanded="true" />
                 <element signature="e#1277#1293#0" expanded="true" />
@@ -173,6 +181,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -189,14 +198,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/C/home/STL" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="CMakeSettings" />
@@ -246,7 +254,8 @@
       <workItem from="1559557212254" duration="7170000" />
       <workItem from="1559606072258" duration="6699000" />
       <workItem from="1559636608018" duration="5277000" />
-      <workItem from="1560103780665" duration="2366000" />
+      <workItem from="1560103780665" duration="3880000" />
+      <workItem from="1560689978083" duration="44000" />
     </task>
     <task id="LOCAL-00001" summary="First steps">
       <created>1559324642969</created>
@@ -308,18 +317,17 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="105101000" />
+    <option name="totallyTimeSpent" value="106659000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1918" y="-3" width="1924" height="1052" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2683706" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27103302" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49840257" visible="true" weight="0.32116005" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49840257" weight="0.32116005" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39957035" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -401,12 +409,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/files/lead_main.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/files/sprite.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/files/lead_main.png" />
+    <entry file="file://$PROJECT_DIR$/files/sprite.png" />
     <entry file="file://$PROJECT_DIR$/files/selected_menu.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -422,21 +426,10 @@
     <entry file="file://$PROJECT_DIR$/files/winmine1.gif">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/files/winmine.gif">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/files/tiles.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/files/winmine.gif" />
+    <entry file="file://$PROJECT_DIR$/files/tiles.png" />
     <entry file="file://$PROJECT_DIR$/files/sprite1.png">
       <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/mines.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="736">
-          <caret line="219" column="1" selection-start-line="219" selection-start-column="1" selection-end-line="219" selection-end-column="1" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/libs/menu.c">
       <provider selected="true" editor-type-id="text-editor">
@@ -463,9 +456,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="731">
           <caret line="43" selection-start-line="43" selection-end-line="43" />
-          <folding>
-            <element signature="e#900#901#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -476,6 +466,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/libs/help_routines.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2703">
+          <caret line="159" column="13" selection-start-line="159" selection-start-column="13" selection-end-line="159" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/libs/lead.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
@@ -483,23 +480,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libs/help_routines.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="159" column="13" selection-start-line="159" selection-start-column="13" selection-end-line="159" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/headers/mines.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1955">
-          <caret line="115" column="18" lean-forward="true" selection-start-line="115" selection-start-column="18" selection-end-line="115" selection-end-column="18" />
+        <state relative-caret-position="391">
+          <caret line="23" column="27" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
           <folding>
             <element signature="e#1166#1276#0" expanded="true" />
             <element signature="e#1277#1293#0" expanded="true" />
             <element signature="e#1309#1336#0" expanded="true" />
             <element signature="e#1861#2275#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/mines.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="190" column="9" selection-start-line="190" selection-start-column="9" selection-end-line="190" selection-end-column="9" />
         </state>
       </provider>
     </entry>
