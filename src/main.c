@@ -455,7 +455,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                         fc = face_normal;
                         beg_fc = fc;
                     } else if (event.key.keysym.sym == SDLK_w) {
-                        if (R_u_s() && field.g_state != game_lose) {
+                        if (R_u_s() && field.g_state == game_start) {
                             Open_field(&field, &minesleft);
                         }
                     }
