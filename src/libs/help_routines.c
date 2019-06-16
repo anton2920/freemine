@@ -55,6 +55,9 @@ __bool Init_window(struct SDL_Window **window, struct SDL_Renderer **renderer,
             return __false;
         }
     }
+
+	/* Returning value */
+	return __false;
 }
 
 __bool Field_init(struct game_field *fld, enum field_size s) {
@@ -199,6 +202,9 @@ __bool is_hit_face(enum field_size s, int x, int y) {
         return (x >= large_face_x_offset && x <= large_face_x_offset + face_w &&
                 y >= large_face_y_offset && y <= large_face_y_offset + face_h) ? __true : __false;
     }
+
+	/* Returning value */
+	return __false;
 }
 
 void two_btns(struct game_field *fld, int x, int y) {

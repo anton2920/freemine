@@ -20,7 +20,13 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 
 #include "../headers/mines.h"
 
-#define RECORDS_PATH ("../files/records.bin")
+#ifdef _WIN32
+#define RECORDS_PATH ("C:\\Users\\Public\\anton2920\\FreeMine\\records.bin")
+#endif
+
+#ifdef __unix__
+#define RECORDS_PATH ("records.bin")
+#endif
 
 void Write_Records(struct person *p) {
 
