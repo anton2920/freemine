@@ -60,7 +60,6 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #endif
 
 /* Macros */
-#define CLION (0)
 #ifndef TITLE
     #define TITLE ("FreeMine")
 #endif
@@ -77,25 +76,14 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #define REVERSE_BOOL(__expr) ((__expr) == __true) ? __false : __true
 #define LYAGUSHA (6585) /* For Samara's Voenkomat */
 
-#if CLION == 1
-    #define FRAME_PATH ("../files/winmine1.gif")
-    #define MID_FRAME_PATH ("../files/mid_frame1.png")
-    #define LARGE_FRAME_PATH ("../files/large_frame1.png")
-    #define TILES_PATH ("../files/sprite1.png")
-    #define MENU_GAME_PATH ("../files/menu_game.png")
-    #define SELECTED_MENU_PATH ("../files/selected_menu.png")
-    #define MUS_PATH ("../files/mus.mp3")
-    #define CLICK_SND_PATH ("../files/click.wav")
-#else
-    #define FRAME_PATH ("winmine1.gif")
-    #define MID_FRAME_PATH ("mid_frame1.png")
-    #define LARGE_FRAME_PATH ("large_frame1.png")
-    #define TILES_PATH ("sprite1.png")
-    #define MENU_GAME_PATH ("menu_game.png")
-    #define SELECTED_MENU_PATH ("selected_menu.png")
-    #define MUS_PATH ("mus.mp3")
-    #define CLICK_SND_PATH ("click.wav")
-#endif
+#define FRAME_PATH ("winmine1.gif")
+#define MID_FRAME_PATH ("mid_frame1.png")
+#define LARGE_FRAME_PATH ("large_frame1.png")
+#define TILES_PATH ("sprite1.png")
+#define MENU_GAME_PATH ("menu_game.png")
+#define SELECTED_MENU_PATH ("selected_menu.png")
+#define MUS_PATH ("mus.mp3")
+#define CLICK_SND_PATH ("click.wav")
 
 /* Data types */
 #ifndef __BOOL_TYPE
