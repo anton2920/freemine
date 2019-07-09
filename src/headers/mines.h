@@ -300,7 +300,7 @@ struct menu_state {
     __bool menu_i_color;
     __bool menu_i_sound;
 
-    int is_hovered; /* one one to eight, -1 if not */
+    int is_hovered; /* One to eight, -1 if not */
 };
 
 typedef struct __block {

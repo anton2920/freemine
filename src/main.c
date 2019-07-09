@@ -57,7 +57,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
     auto struct game_field field = {NULL, 0, 0, small, game_off, menu_off, __true, __true, __false};
     auto enum field_size s = Get_Size(argc, argv);
     auto struct menu_state m_state;
-    auto int menu_press_state = -1;
+    auto int menu_press_state;
 
     auto size_t starttime = 0, currtime = 0;
     auto int minesleft;
@@ -66,7 +66,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
     auto enum face_state beg_fc = face_normal;
 
     auto block *curr_block;
-    auto enum check_type ch = unchecked;
+    auto enum check_type ch;
     auto enum mbtn btn = mbtn_no_btn;
 
     auto struct Mix_Chunk *click = NULL;
@@ -142,7 +142,7 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 if (curr_block != NULL) {
                                     if ((ch = switch_block_check_type(curr_block, mbtn_right, field.is_mks_on)) == flaggy) {
                                         --minesleft;
-                                    } else if (ch == question) {
+                                    } else if ((ch == question && field.is_mks_on) || (ch == unchecked && !field.is_mks_on)) {
                                         ++minesleft;
                                     }
                                     if (field.is_snd_on) {

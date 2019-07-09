@@ -99,13 +99,16 @@ void Print_Records(struct person *p) {
 void New_Record(struct person *p, enum field_size s, int time) {
 
     /* Initializing variables */
-    char r_n[NAME_SIZE];
+    auto char r_n[NAME_SIZE];
 
     /* I/O flow */
     printf("You are the fastest time for %s level. Please enter your name: ", (s == small) ? "beginner" :
     (s == medium) ? "intermediate" : "expert");
 
     scanf("%s", r_n);
+
+    while (getchar() != '\n')
+        ;
 
     strcpy(p[(s == small) ? 0 : (s == medium) ? 1 : 2].name, r_n);
     p[(s == small) ? 0 : (s == medium) ? 1 : 2].time = time;
