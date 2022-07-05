@@ -1,6 +1,6 @@
 /*
 FreeMine — a free Windows minesweeper clone written on C with SDL2
-Copyright © Pavlovsky Anton, 2019
+Copyright © Pavlovsky Anton, 2019-2022
 
 This file is part of FreeMine.
 

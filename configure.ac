@@ -13,9 +13,9 @@ AC_CONFIG_HEADERS([src/headers/FreeMine_config.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
 
-# Enable «automake» to simplify creating makefiles:
+# Enable «automake» to simplify creating makefiles:
 AM_INIT_AUTOMAKE
-AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile man/Makefile examples/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile])
 
 # Look for a C (CXX) compiler:
 AC_LANG([C])

@@ -18,4 +18,4 @@ After that, run `ldconfig(8)`. Do `sudo ldconfig`, there's no harm in it.
 It distributes only under GPLv2 licence. Go to [https://www.gnu.org/licenses/] for more information
 
 ## Copyright
-© 2019 Anton
+© anton2920, 2019-2022
