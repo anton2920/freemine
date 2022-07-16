@@ -1,10 +1,8 @@
-cmake_minimum_required(VERSION 3.14)
-project(src C)
+set(CMAKE_C_STANDARD 99)
 
-set(CMAKE_C_STANDARD 90)
-set(SOURCE_FILES main.c libs/help_routines.c libs/draw.c libs/mines.c libs/menu.c libs/lead.c)
-set(HEADER_FILES headers/mines.h)
+find_package(SDL2 REQUIRED)
 
-add_executable(mines ${HEADER_FILES} ${SOURCE_FILES})
+add_executable(FreeMine main.c help_routines.c draw.c mines.c menu.c lead.c)
 
-target_link_libraries(mines SDL2 SDL2_image SDL2_ttf SDL2_mixer m STL)
+target_include_directories(FreeMine PRIVATE ${SDL2_INCLUDE_DIR})
+target_link_libraries(FreeMine PRIVATE ${SDL2_LIBRARIES})
