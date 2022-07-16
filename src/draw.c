@@ -1,47 +1,46 @@
 /*
-FreeMine — a free Windows minesweeper clone written on C with SDL2
-Copyright © Pavlovsky Anton, 2019-2022
+   FreeMine - a free Windows minesweeper clone written on C with SDL2
+   Copyright © anton2920, 2019-2022
 
-This file is part of FreeMine.
+   This file is part of FreeMine.
 
-FreeMine is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+   FreeMine is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-FreeMine is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+   FreeMine is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
+   You should have received a copy of the GNU General Public License
+   along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "../headers/mines.h"
+#include "mines.h"
 
-struct SDL_Texture *getTexture(struct SDL_Renderer *renderer, char *path_to_pic) {
 
-    /* Initializing variables */
-    auto struct SDL_Surface *Image = IMG_Load(path_to_pic);
-    assert(Image != NULL); /* Debugging sh*t */
+struct SDL_Texture *getTexture(struct SDL_Renderer *renderer, char *path_to_pic)
+{
+    struct SDL_Surface *Image = IMG_Load(path_to_pic);
+    assert(Image != NULL);
+
     /* SDL_SetColorKey(Image, SDL_TRUE, SDL_MapRGB(Image->format, 255, 255, 255)); */
-    auto struct SDL_Texture *Texture = SDL_CreateTextureFromSurface(renderer, Image);
+    struct SDL_Texture *Texture = SDL_CreateTextureFromSurface(renderer, Image);
     assert(Texture != NULL);
+
     SDL_FreeSurface(Image);
 
-
-    /* Returning value */
     return Texture;
 }
 
-void Draw_frame(struct SDL_Renderer *renderer, struct SDL_Texture *frameTexture, enum field_size size) {
 
-    /* Initializing variables */
-    auto struct SDL_Rect frameRect = {0, 0, 0, 0};
-    auto struct SDL_Rect fRect = {0, 0, 0, 0};
+void Draw_frame(struct SDL_Renderer *renderer, struct SDL_Texture *frameTexture, enum field_size size)
+{
+    struct SDL_Rect frameRect = {0, 0, 0, 0};
+    struct SDL_Rect fRect = {0, 0, 0, 0};
 
-    /* Main part */
     if (size == small) {
         frameRect.w = small_width;
         frameRect.h = small_height;
@@ -65,14 +64,13 @@ void Draw_frame(struct SDL_Renderer *renderer, struct SDL_Texture *frameTexture,
     SDL_RenderCopy(renderer, frameTexture, &fRect, &frameRect);
 }
 
-void Draw_field(struct SDL_Renderer *renderer, struct SDL_Texture *fieldStuff, struct game_field *fld) {
 
-    /* Initializing variables */
-    auto int i, j;
-    auto struct SDL_Rect bTile = {0, 0, tile_w, tile_h};
-    auto struct SDL_Rect currT = {0, 0, tile_w, tile_h};
+void Draw_field(struct SDL_Renderer *renderer, struct SDL_Texture *fieldStuff, struct game_field *fld)
+{
+    int i, j;
+    struct SDL_Rect bTile = {0, 0, tile_w, tile_h};
+    struct SDL_Rect currT = {0, 0, tile_w, tile_h};
 
-    /* Main part */
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
             bTile.x = fld->fld[i][j].rect.x;
@@ -98,9 +96,10 @@ void Draw_field(struct SDL_Renderer *renderer, struct SDL_Texture *fieldStuff, s
                     currT.y = mine_y;
                 } else if (fld->fld[i][j].type == digity) {
                     currT.x = (fld->fld[i][j].digit == 1) ? digit_1_x : (fld->fld[i][j].digit == 2) ? digit_2_x:
-                            (fld->fld[i][j].digit == 3) ? digit_3_x : (fld->fld[i][j].digit == 4) ? digit_4_x :
-                            (fld->fld[i][j].digit == 5) ? digit_5_x : (fld->fld[i][j].digit == 6) ? digit_6_x :
-                            (fld->fld[i][j].digit == 7) ? digit_7_x : (fld->fld[i][j].digit == 8) ? digit_8_x : pressed_x;
+                              (fld->fld[i][j].digit == 3) ? digit_3_x : (fld->fld[i][j].digit == 4) ? digit_4_x :
+                              (fld->fld[i][j].digit == 5) ? digit_5_x : (fld->fld[i][j].digit == 6) ? digit_6_x :
+                              (fld->fld[i][j].digit == 7) ? digit_7_x : (fld->fld[i][j].digit == 8) ? digit_8_x :
+                              pressed_x;
                     currT.y = digity_y;
                 } else {
                     currT.x = pressed_x;
@@ -115,15 +114,14 @@ void Draw_field(struct SDL_Renderer *renderer, struct SDL_Texture *fieldStuff, s
     }
 }
 
+
 void Draw_timerface(struct SDL_Renderer *renderer, struct game_field *fld, struct SDL_Texture *timerText,
-        enum field_size size, size_t currtime, int minesleft, enum face_state fc) {
+                    enum field_size size, size_t currtime, int minesleft, enum face_state fc)
+{
+    struct SDL_Rect bTile = {0, 0, digit_w, digit_h};
+    struct SDL_Rect currT = {0, 0, digit_w, digit_h};
+    int digit, i, timer_x_o = 0, timer_y_o = 0, mines_x_o = 0, mines_y_o = 0, face_x_o = 0, face_y_o = 0;
 
-    /* Initializing variables */
-    auto struct SDL_Rect bTile = {0, 0, digit_w, digit_h};
-    auto struct SDL_Rect currT = {0, 0, digit_w, digit_h};
-    auto int digit, i, timer_x_o = 0, timer_y_o = 0, mines_x_o = 0, mines_y_o = 0, face_x_o = 0, face_y_o = 0;
-
-    /* Main part */
     if (size == small) {
         timer_x_o = small_timer_last_x_offset;
         timer_y_o = small_timer_last_y_offset;
@@ -192,10 +190,10 @@ void Draw_timerface(struct SDL_Renderer *renderer, struct game_field *fld, struc
     bTile.h = face_h;
     currT.y = face_y_offset;
     currT.x = (fc == face_normal) ? face_normal_x_offset :
-                (fc == face_pressed) ? face_pressed_x_offset :
-                (fc == face_o) ? face_o_x_offset :
-                (fc == face_dead) ? face_dead_x_offset :
-                face_cool_x_offset;
+              (fc == face_pressed) ? face_pressed_x_offset :
+              (fc == face_o) ? face_o_x_offset :
+              (fc == face_dead) ? face_dead_x_offset :
+              face_cool_x_offset;
     currT.w = bTile.w;
     currT.h = bTile.h;
     if (!fld->is_clr_on) {
@@ -204,15 +202,14 @@ void Draw_timerface(struct SDL_Renderer *renderer, struct game_field *fld, struc
     SDL_RenderCopy(renderer, timerText, &currT, &bTile);
 }
 
+
 void Draw_menu(struct SDL_Renderer *renderer, struct game_field *fld, struct menu_state *st,
-        struct SDL_Texture *menu_game, struct SDL_Texture *select, struct SDL_Texture *tiles) {
+               struct SDL_Texture *menu_game, struct SDL_Texture *select, struct SDL_Texture *tiles)
+{
+    struct SDL_Rect drawRect = {0, 0, menu_panel_w, menu_panel_h};
+    struct SDL_Rect tickRect = {tick_x_offset, tick_black_y_offset, tick_w, tick_h};
+    struct SDL_Rect selRect = {0, 0, menu_itm_w, menu_itm_h};
 
-    /* Initializing variables */
-    auto struct SDL_Rect drawRect = {0, 0, menu_panel_w, menu_panel_h};
-    auto struct SDL_Rect tickRect = {tick_x_offset, tick_black_y_offset, tick_w, tick_h};
-    auto struct SDL_Rect selRect = {0, 0, menu_itm_w, menu_itm_h};
-
-    /* Main part */
     if (fld->m_state == menu_game_pressed) {
         if (fld->s == small) {
             drawRect.x = small_menu_game_x_offset;
@@ -229,7 +226,8 @@ void Draw_menu(struct SDL_Renderer *renderer, struct game_field *fld, struct men
 
         drawRect.w = tick_w;
         drawRect.h = tick_h;
-        drawRect.x = (fld->s == small) ? small_tick_x_offset : (fld->s == medium) ? medium_tick_x_offset : large_tick_x_offset;
+        drawRect.x = (fld->s == small) ? small_tick_x_offset : (fld->s == medium) ? medium_tick_x_offset
+                                                                                  : large_tick_x_offset;
         drawRect.y = (st->menu_i_begginer) ? tick_y_beg : (st->menu_i_intermediate) ? tick_y_interm : tick_y_adv;
         SDL_RenderCopy(renderer, tiles, &tickRect, &drawRect);
 
@@ -264,19 +262,25 @@ void Draw_menu(struct SDL_Renderer *renderer, struct game_field *fld, struct men
             drawRect.w = menu_itm_w;
             drawRect.h = menu_itm_h;
 
-            drawRect.y += (!st->is_hovered) ? (menu_new_y_offset) : (st->is_hovered == 1) ? (menu_beg_y_offset) :
-                    (st->is_hovered == 2) ? (menu_interm_y_offset) : (st->is_hovered == 3) ? (menu_adv_y_offset) :
-                    (st->is_hovered == 4) ? (menu_mks_y_offset) : (st->is_hovered == 5) ? (menu_clr_y_offset) :
-                    (st->is_hovered == 6) ? (menu_snd_y_offset) : (st->is_hovered == 7) ? (menu_tabl_y_offset) : (menu_exit_y_offset);
+            drawRect.y += (!st->is_hovered) ? (menu_new_y_offset) :
+                          (st->is_hovered == 1) ? (menu_beg_y_offset) :
+                          (st->is_hovered == 2) ? (menu_interm_y_offset) :
+                          (st->is_hovered == 3) ? (menu_adv_y_offset) :
+                          (st->is_hovered == 4) ? (menu_mks_y_offset) :
+                          (st->is_hovered == 5) ? (menu_clr_y_offset) :
+                          (st->is_hovered == 6) ? (menu_snd_y_offset) :
+                          (st->is_hovered == 7) ? (menu_tabl_y_offset) :
+                          (menu_exit_y_offset);
             selRect.y = st->is_hovered * menu_itm_h;
             SDL_RenderCopy(renderer, select, &selRect, &drawRect);
 
             drawRect.w = tick_w;
             drawRect.h = tick_h;
-            drawRect.x = (fld->s == small) ? small_tick_x_offset : (fld->s == medium) ? medium_tick_x_offset : large_tick_x_offset;
+            drawRect.x = (fld->s == small) ? small_tick_x_offset : (fld->s == medium) ? medium_tick_x_offset
+                                                                                      : large_tick_x_offset;
             drawRect.y = (st->menu_i_begginer && st->is_hovered == 1) ? tick_y_beg :
-                    (st->menu_i_intermediate && st->is_hovered == 2) ? tick_y_interm :
-                    (st->menu_i_advanced && st->is_hovered == 3) ? tick_y_adv : 0;
+                         (st->menu_i_intermediate && st->is_hovered == 2) ? tick_y_interm :
+                         (st->menu_i_advanced && st->is_hovered == 3) ? tick_y_adv : 0;
             if (st->is_hovered >= 1 && st->is_hovered <= 3 && drawRect.y) {
                 SDL_RenderCopy(renderer, tiles, &tickRect, &drawRect);
             }

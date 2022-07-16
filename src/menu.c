@@ -1,55 +1,57 @@
 /*
-FreeMine — a free Windows minesweeper clone written on C with SDL2
-Copyright © Pavlovsky Anton, 2019-2022
+   FreeMine - a free Windows minesweeper clone written on C with SDL2
+   Copyright © anton2920, 2019-2022
 
-This file is part of FreeMine.
+   This file is part of FreeMine.
 
-FreeMine is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+   FreeMine is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-FreeMine is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+   FreeMine is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
+   You should have received a copy of the GNU General Public License
+   along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "../headers/mines.h"
+#include "mines.h"
 
-enum menu_panel Is_menu_pressed(struct game_field *fld, int x, int y, int pr_u) {
 
-    /* Initializing variables */
-    auto enum menu_panel mp = menu_off;
+enum menu_panel Is_menu_pressed(struct game_field *fld, int x, int y, int pr_u)
+{
+    enum menu_panel mp = menu_off;
 
-    /* Main part */
     if (fld->s == small) {
         mp = (x >= small_menu_game_x_offset && x <= small_menu_game_x_offset + menu_btn_w &&
-            y >= small_menu_game_y_offset && y <= small_menu_game_y_offset + menu_btn_h) ? menu_game_pressed : menu_off;
+              y >= small_menu_game_y_offset && y <= small_menu_game_y_offset + menu_btn_h) ? menu_game_pressed
+                                                                                           : menu_off;
     } else if (fld->s == medium) {
         mp = (x >= medium_menu_game_x_offset && x <= medium_menu_game_x_offset + menu_btn_w &&
-                y >= medium_menu_game_y_offset && y <= medium_menu_game_y_offset + menu_btn_h) ? menu_game_pressed : menu_off;
+              y >= medium_menu_game_y_offset && y <= medium_menu_game_y_offset + menu_btn_h) ? menu_game_pressed
+                                                                                             : menu_off;
     } else if (fld->s == large) {
         mp = (x >= large_menu_game_x_offset && x <= large_menu_game_x_offset + menu_btn_w &&
-                y >= large_menu_game_y_offset && y <= large_menu_game_y_offset + menu_btn_h) ? menu_game_pressed : menu_off;
+              y >= large_menu_game_y_offset && y <= large_menu_game_y_offset + menu_btn_h) ? menu_game_pressed
+                                                                                           : menu_off;
     }
 
     if (mp == menu_game_pressed && pr_u == UNPRESS) {
         return mp;
     }
 
-    /* Returning value */
     return (mp == menu_game_pressed && fld->m_state != menu_game_pressed && pr_u == PRESS) ? mp : menu_off;
 }
 
-__bool Check_hover(enum field_size s, struct menu_state *st, int x, int y) {
 
-    /* Initializing variables */
-    auto __bool is_changed = __false;
-    auto int x_o = (s == small) ? small_menu_game_x_offset : (s == medium) ? medium_menu_game_x_offset : large_menu_game_x_offset;
+__bool Check_hover(enum field_size s, struct menu_state *st, int x, int y)
+{
+    __bool is_changed = __false;
+    int x_o = (s == small) ? small_menu_game_x_offset : (s == medium) ? medium_menu_game_x_offset
+                                                                      : large_menu_game_x_offset;
 
     /* Main part */
     if (x >= x_o && x <= x_o + menu_itm_w) {
@@ -87,15 +89,16 @@ __bool Check_hover(enum field_size s, struct menu_state *st, int x, int y) {
         st->is_hovered = NOT_HOVERED;
     }
 
-    /* Returning value */
     return is_changed;
 }
 
-int Process_menu_press(struct menu_state *st) {
 
-    /* Main part */
+int Process_menu_press(struct menu_state *st)
+{
     switch (st->is_hovered) {
-        case 0: case 7: case 8:
+        case 0:
+        case 7:
+        case 8:
             break;
         case 1:
             st->menu_i_begginer = __true;
@@ -125,6 +128,5 @@ int Process_menu_press(struct menu_state *st) {
             break;
     }
 
-    /* Returning value */
     return st->is_hovered;
 }

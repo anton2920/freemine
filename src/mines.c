@@ -1,31 +1,30 @@
 /*
-FreeMine — a free Windows minesweeper clone written on C with SDL2
-Copyright © Pavlovsky Anton, 2019-2022
+   FreeMine - a free Windows minesweeper clone written on C with SDL2
+   Copyright © anton2920, 2019-2022
 
-This file is part of FreeMine.
+   This file is part of FreeMine.
 
-FreeMine is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+   FreeMine is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-FreeMine is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+   FreeMine is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
+   You should have received a copy of the GNU General Public License
+   along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "../headers/mines.h"
+#include "mines.h"
 
-void Spawn_mines(struct game_field *fld, block *obj) {
 
-    /* Initializing variables */
-    auto int i = 0, j = 0, k;
+void Spawn_mines(struct game_field *fld, block *obj)
+{
+    int i, j, k;
 
-    /* Main part */
     for (k = 0; k < mines_l(fld->s); ++k) {
         i = rand() % fld->tiles_y;
         j = rand() % fld->tiles_x;
@@ -40,12 +39,11 @@ void Spawn_mines(struct game_field *fld, block *obj) {
     Count_near(fld);
 }
 
-void Count_near(struct game_field *fld) {
 
-    /* Initializing variables */
-    auto int i, j, i1, j1, counter = 0;
+void Count_near(struct game_field *fld)
+{
+    int i, j, i1, j1, counter = 0;
 
-    /* Main part */
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
             if (fld->fld[i][j].type == miny) {
@@ -70,9 +68,9 @@ void Count_near(struct game_field *fld) {
     }
 }
 
-void Process_press(struct game_field *fld, block *curr_block) {
 
-    /* Main part */
+void Process_press(struct game_field *fld, block *curr_block)
+{
     switch (curr_block->type) {
         case nothing:
             curr_block->check = pressed;
@@ -92,13 +90,12 @@ void Process_press(struct game_field *fld, block *curr_block) {
     }
 }
 
-void Open_near_blank(struct game_field *fld, block *curr_block) {
 
-    /* Initializing variables */
-    auto int i = 0, j = 0, i1, j1;
-    auto __bool is_found = __false;
+void Open_near_blank(struct game_field *fld, block *curr_block)
+{
+    int i = 0, j = 0, i1, j1;
+    __bool is_found = __false;
 
-    /* Main part */
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
             if (fld->fld[i] + j == curr_block) {
@@ -120,7 +117,8 @@ void Open_near_blank(struct game_field *fld, block *curr_block) {
     if (is_found) {
         for (i1 = ((i - 1 >= 0) ? i - 1 : 0); i1 < ((i + 2 <= fld->tiles_y) ? i + 2 : fld->tiles_y); ++i1) {
             for (j1 = ((j - 1 >= 0) ? j - 1 : 0); j1 < ((j + 2 <= fld->tiles_x) ? j + 2 : fld->tiles_x); ++j1) {
-                if ((fld->fld[i1][j1].type == nothing || fld->fld[i1][j1].type == digity) && fld->fld[i1][j1].check != pressed) {
+                if ((fld->fld[i1][j1].type == nothing || fld->fld[i1][j1].type == digity) &&
+                    fld->fld[i1][j1].check != pressed) {
                     Open_near_blank(fld, fld->fld[i1] + j1);
                 }
             }
@@ -128,12 +126,11 @@ void Open_near_blank(struct game_field *fld, block *curr_block) {
     }
 }
 
-void Uncover_rest_mines(struct game_field *fld) {
 
-    /* Initializing variables */
-    auto int i, j;
+void Uncover_rest_mines(struct game_field *fld)
+{
+    int i, j;
 
-    /* Main part */
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
             if (fld->fld[i][j].type != miny && fld->fld[i][j].check == flaggy) {
@@ -146,21 +143,19 @@ void Uncover_rest_mines(struct game_field *fld) {
     }
 }
 
-void Check_for_win(struct game_field *fld, int *minesleft) {
 
-    /* Initializing variables */
-    auto int i, j;
+void Check_for_win(struct game_field *fld, int *minesleft)
+{
+    int i, j;
 
-    /* Main part */
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
             if ((fld->fld[i][j].check != pressed && fld->fld[i][j].check != flaggy &&
-                fld->fld[i][j].type != miny) || fld->fld[i][j].type == miny_red) {
+                 fld->fld[i][j].type != miny) || fld->fld[i][j].type == miny_red) {
                 return;
             }
         }
     }
-
 
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
@@ -175,13 +170,12 @@ void Check_for_win(struct game_field *fld, int *minesleft) {
     }
 }
 
-void Mine_searcher(struct game_field *fld, block *obj) {
 
-    /* Initializing variables */
-    auto int i = 0, j = 0, i1, j1, counter = 0;
-    auto __bool is_found = __false, can_search = __false;
+void Mine_searcher(struct game_field *fld, block *obj)
+{
+    int i = 0, j = 0, i1, j1, counter = 0;
+    __bool is_found = __false, can_search = __false;
 
-    /* Main part */
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
             if (fld->fld[i] + j == obj) {

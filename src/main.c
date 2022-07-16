@@ -1,90 +1,93 @@
 /*
-FreeMine — a free Windows minesweeper clone written on C with SDL2
-Copyright © Pavlovsky Anton, 2019-2022
+   FreeMine - a free Windows minesweeper clone written on C with SDL2
+   Copyright © anton2920, 2019-2022
 
-This file is part of FreeMine.
+   This file is part of FreeMine.
 
-FreeMine is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+   FreeMine is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-FreeMine is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+   FreeMine is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
+   You should have received a copy of the GNU General Public License
+   along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "headers/mines.h"
+#include "mines.h"
+
 
 #ifdef _WIN32
-	#undef main
+#undef main
 #endif
 
-int main(int argc, const char *argv[], const char *envp[]) {
 
-    /* Initializing variables */
+int main(int argc, const char *argv[], const char *envp[])
+{
 #ifdef _WIN32
-	#define KIB (100)
-	auto char hp[KIB] = {0}, hp1[KIB] = {0};
-	strcpy(hp, "");
-	strcat(hp, "pics\\");
-	strcpy(hp1, hp);
+    #define KIB (100)
+    char hp[KIB] = {0}, hp1[KIB] = {0};
+    strcpy(hp, "");
+    strcat(hp, "pics\\");
+    strcpy(hp1, hp);
 #endif
 #ifdef __unix__
-	#define KIB (1024)
-    auto char hp[KIB] = {}, hp1[KIB] = {};
+    #define KIB (1024)
+    char hp[KIB] = {}, hp1[KIB] = {};
     strcat(hp, getenv("HOME"));
     strcat(hp, "/.local/share/FreeMine/");
     strcpy(hp1, hp);
 #endif
 
-    auto __bool quit = __false;
-    auto union SDL_Event event, new_event;
-    auto int get_ev = 0;
+    __bool quit = __false;
+    union SDL_Event event, new_event;
+    int get_ev = 0;
 
-    auto struct SDL_Window *window;
-    auto struct SDL_Renderer *renderer;
+    struct SDL_Window *window;
+    struct SDL_Renderer *renderer;
 
-    auto struct SDL_Texture *frameTexture = NULL;
-    auto struct SDL_Texture *tilesTexture = NULL;
-    auto struct SDL_Texture *menu_texture = NULL;
-    auto struct SDL_Texture *selectTexture = NULL;
+    struct SDL_Texture *frameTexture = NULL;
+    struct SDL_Texture *tilesTexture = NULL;
+    struct SDL_Texture *menu_texture = NULL;
+    struct SDL_Texture *selectTexture = NULL;
 
-    auto struct game_field field = {NULL, 0, 0, small, game_off, menu_off, __true, __true, __false};
-    auto enum field_size s = Get_Size(argc, argv);
-    auto struct menu_state m_state;
-    auto int menu_press_state;
+    struct game_field field = {NULL, 0, 0, small, game_off, menu_off, __true, __true, __false};
+    enum field_size s = Get_Size(argc, argv);
+    struct menu_state m_state;
+    int menu_press_state;
 
-    auto size_t starttime = 0, currtime = 0;
-    auto int minesleft;
-    auto __bool is_start = __false;
-    auto enum face_state fc = face_normal;
-    auto enum face_state beg_fc = face_normal;
+    size_t starttime = 0, currtime = 0;
+    int minesleft;
+    __bool is_start = __false;
+    enum face_state fc = face_normal;
+    enum face_state beg_fc = face_normal;
 
-    auto block *curr_block;
-    auto enum check_type ch;
-    auto enum mbtn btn = mbtn_no_btn;
+    block *curr_block;
+    enum check_type ch;
+    enum mbtn btn = mbtn_no_btn;
 
-    auto struct Mix_Chunk *click = NULL;
-    auto Mix_Music *mus = NULL;
+    struct Mix_Chunk *click = NULL;
+    Mix_Music *mus = NULL;
 
-    auto struct person records[3] = {0};
+    struct person records[3] = {0};
 
     /* Main part. SDL2 */
     srand(time(NULL) / 2);
-    SDL_Init_All();
+    SDL_init_all();
     if (Init_window(&window, &renderer, s)) {
         if (Field_init(&field, s) == __false) {
-            exit(BAD_EXIT_CODE);
+            exit(EXIT_FAILURE);
         }
         Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);
         Menu_state_init(&field, &m_state);
         minesleft = mines_l(field.s);
-        frameTexture = getTexture(renderer, (field.s == small) ? strcat(hp1, FRAME_PATH) : (field.s == medium) ? strcat(hp1, MID_FRAME_PATH) : strcat(hp1, LARGE_FRAME_PATH));
+        frameTexture = getTexture(renderer, (field.s == small) ? strcat(hp1, FRAME_PATH) :
+                                            (field.s == medium) ? strcat(hp1, MID_FRAME_PATH) :
+                                            strcat(hp1, LARGE_FRAME_PATH));
         strcpy(hp1, hp);
         tilesTexture = getTexture(renderer, strcat(hp1, TILES_PATH));
         strcpy(hp1, hp);
@@ -96,7 +99,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
         strcpy(hp1, hp);
         while (!quit) {
             switch (field.g_state) {
-                case game_off: case game_start:
+                case game_off:
+                case game_start:
                     break;
                 case game_lose:
                     is_start = __false;
@@ -140,9 +144,11 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 btn = mbtn_right;
                                 curr_block = get_clicked_block(&field, event.button.x, event.button.y);
                                 if (curr_block != NULL) {
-                                    if ((ch = switch_block_check_type(curr_block, mbtn_right, field.is_mks_on)) == flaggy) {
+                                    if ((ch = switch_block_check_type(curr_block, mbtn_right, field.is_mks_on)) ==
+                                        flaggy) {
                                         --minesleft;
-                                    } else if ((ch == question && field.is_mks_on) || (ch == unchecked && !field.is_mks_on)) {
+                                    } else if ((ch == question && field.is_mks_on) ||
+                                               (ch == unchecked && !field.is_mks_on)) {
                                         ++minesleft;
                                     }
                                     if (field.is_snd_on) {
@@ -170,7 +176,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 } else if (is_hit_face(field.s, event.button.x, event.button.y)) {
                                     fc = face_pressed;
                                 }
-                                if (field.m_state == menu_off || !Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
+                                if (field.m_state == menu_off ||
+                                    !Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
                                     field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, PRESS);
                                 }
                                 beg_fc = fc;
@@ -189,7 +196,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
                     } else if (event.type == SDL_MOUSEBUTTONUP) {
                         if (event.button.button == SDL_BUTTON_LEFT && !get_ev && btn == mbtn_left) {
                             curr_block = get_clicked_block(&field, event.button.x, event.button.y);
-                            if (field.m_state == menu_game_pressed && Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
+                            if (field.m_state == menu_game_pressed &&
+                                Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
                                 if (!(menu_press_state = Process_menu_press(&m_state))) {
                                     Field_init(&field, s);
                                     is_start = __false;
@@ -343,7 +351,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 fc = face_pressed;
                                 btn = mbtn_left;
                             }
-                            if (field.m_state == menu_off || !Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
+                            if (field.m_state == menu_off ||
+                                !Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
                                 field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, PRESS);
                             }
                         }
@@ -360,7 +369,8 @@ int main(int argc, const char *argv[], const char *envp[]) {
                                 if (field.is_snd_on) {
                                     Play_click_sound(click);
                                 }
-                            } else if (field.m_state == menu_game_pressed && Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
+                            } else if (field.m_state == menu_game_pressed &&
+                                       Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
                                 if (!(menu_press_state = Process_menu_press(&m_state))) {
                                     Field_init(&field, s);
                                     is_start = __false;

@@ -1,79 +1,48 @@
 /*
-FreeMine — a free Windows minesweeper clone written on C with SDL2
-Copyright © Pavlovsky Anton, 2019-2022
+   FreeMine - a free Windows minesweeper clone written on C with SDL2
+   Copyright © anton2920, 2019-2022
 
-This file is part of FreeMine.
+   This file is part of FreeMine.
 
-FreeMine is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+   FreeMine is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-FreeMine is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+   FreeMine is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
+   You should have received a copy of the GNU General Public License
+   along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef SRC_MINES_H
-#define SRC_MINES_H
+#ifndef MINES_H
+#define MINES_H
 
-/* Include config header */
-#include "FreeMine_config.h"
-
-/* Include standard headers */
-#if (HAVE_STDIO_H == 1)
-    #include <stdio.h>
-#endif
-#if (HAVE_STDLIB_H == 1)
+#include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
-#endif
-#if (HAVE_ASSERT_H == 1)
-    #include <assert.h>
-#endif
-#if (HAVE_STRING_H == 1)
-    #include <string.h>
-#endif
-#if (HAVE_TIME_H == 1)
-    #include <time.h>
-#endif
+#include <string.h>
+#include <time.h>
 
 /* SDL2 */
-#ifdef _WIN32
-    #include <SDL.h>
-    #include <SDL_image.h>
-    #include <SDL_ttf.h>
-    #include <SDL_mixer.h>
-#endif
-#ifdef __unix__
-    #if (HAVE_SDL2_SDL_H)
-        #include <SDL2/SDL.h>
-    #elif (HAVE_SDL_H)
-        #include <SDL.h>
-    #endif
-    #include <SDL2/SDL_image.h>
-    #include <SDL2/SDL_ttf.h>
-    #include <SDL2/SDL_mixer.h>
-#endif
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 /* Macros */
-#ifndef TITLE
-    #define TITLE ("FreeMine")
-#endif
+#define TITLE ("FreeMine")
+
 #define DELAY_TIME (30)
 #define WIN_PANEL (20)
 #define LINUX_PANEL (WIN_PANEL + 3)
-#ifndef BAD_EXIT_CODE
-    #define BAD_EXIT_CODE (-1)
-#endif
 #define NAME_SIZE (20)
 #define PRESS (1)
 #define UNPRESS (2)
 #define NOT_HOVERED (-1)
-#define REVERSE_BOOL(__expr) ((__expr) == __true) ? __false : __true
 #define LYAGUSHA (6585) /* For Samara's Voenkomat */
 
 #define FRAME_PATH ("winmine1.gif")
@@ -85,21 +54,14 @@ along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 #define MUS_PATH ("mus.mp3")
 #define CLICK_SND_PATH ("click.wav")
 
+
 /* Data types */
-#ifndef __BOOL_TYPE
-    #define __BOOL_TYPE
-    typedef enum {
-        __false,
-        __true
-    } __bool;
-#endif
-
-
 enum field_size {
     small,
     medium,
     large
 };
+
 
 enum small_field {
     small_width = 158,
@@ -120,6 +82,7 @@ enum small_field {
     small_tick_x_offset = 11
 };
 
+
 enum medium_field {
     medium_width = 280,
     medium_height = 342,
@@ -138,6 +101,7 @@ enum medium_field {
     medium_menu_game_y_offset = 0,
     medium_tick_x_offset = 10
 };
+
 
 enum large_field {
     large_width = 503,
@@ -158,6 +122,7 @@ enum large_field {
     large_tick_x_offset = 9
 };
 
+
 enum fill_type {
     miny,
     miny_red,
@@ -165,6 +130,7 @@ enum fill_type {
     digity,
     nothing
 };
+
 
 enum check_type {
     unchecked,
@@ -175,11 +141,13 @@ enum check_type {
     hovered_question
 };
 
+
 enum tile_s {
     tile_w = 15,
     tile_h = 15,
     tile_space = 1,
 };
+
 
 enum png_offset {
     unchecked_x = 0,
@@ -217,15 +185,18 @@ enum png_offset {
     BW_OFFSET = 160
 };
 
+
 enum digit_s {
     digit_w = 13,
     digit_h = 23
 };
 
+
 enum face_s {
     face_w = 26,
     face_h = 26
 };
+
 
 enum mbtn {
     mbtn_no_btn,
@@ -233,6 +204,7 @@ enum mbtn {
     mbtn_right,
     mbtn_mid
 };
+
 
 enum face_state {
     face_normal,
@@ -242,6 +214,7 @@ enum face_state {
     face_cool
 };
 
+
 enum game_state {
     game_off,
     game_start,
@@ -249,10 +222,12 @@ enum game_state {
     game_win
 };
 
+
 enum tick_size {
     tick_w = 7,
     tick_h = 7
 };
+
 
 enum menu_panel {
     menu_off,
@@ -291,6 +266,7 @@ enum menu_panel {
     menu_exit_y_offset = 194
 };
 
+
 struct menu_state {
     __bool menu_i_begginer;
     __bool menu_i_intermediate;
@@ -303,12 +279,14 @@ struct menu_state {
     int is_hovered; /* One to eight, -1 if not */
 };
 
+
 typedef struct __block {
     struct SDL_Rect rect;
     enum fill_type type;
     enum check_type check;
     int digit;
 } block;
+
 
 struct game_field {
     block **fld;
@@ -322,15 +300,15 @@ struct game_field {
     __bool is_snd_on;
 };
 
+
 struct person {
     char name[NAME_SIZE];
     int time;
 };
 
-/* Function declarations */
 
 /* help_routines.c */
-__bool SDL_Init_All();
+__bool SDL_init_all();
 __bool Init_window(struct SDL_Window **window, struct SDL_Renderer **renderer, enum field_size);
 __bool Field_init(struct game_field *, enum field_size);
 void Field_destroy(struct game_field *, enum field_size);
@@ -348,13 +326,16 @@ void Remove_questions(struct game_field *);
 void Open_field(struct game_field *, int *);
 __bool R_u_s(void);
 
+
 /* draw.c */
 struct SDL_Texture *getTexture(struct SDL_Renderer *, char *name);
 void Draw_frame(struct SDL_Renderer *, struct SDL_Texture *, enum field_size);
 void Draw_field(struct SDL_Renderer *, struct SDL_Texture *, struct game_field *);
-void Draw_timerface(struct SDL_Renderer *, struct game_field *, struct SDL_Texture *, enum field_size, size_t, int, enum face_state);
+void Draw_timerface(struct SDL_Renderer *, struct game_field *, struct SDL_Texture *, enum field_size, size_t, int,
+                    enum face_state);
 void Draw_menu(struct SDL_Renderer *, struct game_field *, struct menu_state *,
                struct SDL_Texture *menu_game, struct SDL_Texture *select, struct SDL_Texture *tiles);
+
 
 /* mines.c */
 void Spawn_mines(struct game_field *, block *);
@@ -365,10 +346,12 @@ void Uncover_rest_mines(struct game_field *);
 void Check_for_win(struct game_field *, int *);
 void Mine_searcher(struct game_field *, block *);
 
+
 /* menu.c */
 enum menu_panel Is_menu_pressed(struct game_field *fld, int x, int y, int pr_u);
 __bool Check_hover(enum field_size, struct menu_state *, int x, int y);
 int Process_menu_press(struct menu_state *);
+
 
 /* lead.c */
 void Write_Records(struct person *p);
@@ -378,5 +361,3 @@ void Print_Records(struct person *p);
 void New_Record(struct person *p, enum field_size s, int time);
 
 #endif
-
-/* 1859 lines */
