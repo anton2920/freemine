@@ -18,6 +18,8 @@
    along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <stdbool.h>
+
 #include "mines.h"
 
 
@@ -30,35 +32,35 @@ void SDL_init_all(void)
 }
 
 
-__bool Init_window(struct SDL_Window **window, struct SDL_Renderer **renderer,
+bool Init_window(struct SDL_Window **window, struct SDL_Renderer **renderer,
                    enum field_size s)
 {
     if (s == small) {
         if ((*window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, small_width,
                                         small_height, SDL_WINDOW_SHOWN)) == NULL) {
-            return __false;
+            return false;
         } else if ((*renderer = SDL_CreateRenderer(*window, -1, 0)) == NULL) {
-            return __false;
+            return false;
         }
     } else if (s == medium) {
         if ((*window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, medium_width,
                                         medium_height, SDL_WINDOW_SHOWN)) == NULL) {
-            return __false;
+            return false;
         } else if ((*renderer = SDL_CreateRenderer(*window, -1, 0)) == NULL) {
-            return __false;
+            return false;
         }
     } else if (s == large) {
         if ((*window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, large_width,
                                         large_height, SDL_WINDOW_SHOWN)) == NULL) {
-            return __false;
+            return false;
         } else if ((*renderer = SDL_CreateRenderer(*window, -1, 0)) == NULL) {
-            return __false;
+            return false;
         }
     }
 }
 
 
-__bool Field_init(struct game_field *fld, enum field_size s)
+bool Field_init(struct game_field *fld, enum field_size s)
 {
     int i, j;
 
@@ -79,11 +81,11 @@ __bool Field_init(struct game_field *fld, enum field_size s)
     fld->m_state = menu_off;
 
     if ((fld->fld = (block * *) malloc(fld->tiles_y * sizeof(block * ))) == NULL) {
-        return __false;
+        return false;
     }
     for (i = 0; i < fld->tiles_y; ++i) {
         if ((fld->fld[i] = (block * ) malloc(sizeof(block) * fld->tiles_x)) == NULL) {
-            return __false;
+            return false;
         }
     }
     for (i = 0; i < fld->tiles_y; ++i) {
@@ -103,7 +105,7 @@ __bool Field_init(struct game_field *fld, enum field_size s)
     }
 
     /* Returning value */
-    return __true;
+    return true;
 }
 
 
@@ -148,7 +150,7 @@ block *get_clicked_block(struct game_field *fld, int x, int y)
 }
 
 
-enum check_type switch_block_check_type(block *blk, enum mbtn b, __bool is_mks)
+enum check_type switch_block_check_type(block *blk, enum mbtn b, bool is_mks)
 {
     if (b == mbtn_right) {
         if (is_mks) {
@@ -189,18 +191,18 @@ void Block_untoggle_hovered(struct game_field *fld)
 }
 
 
-__bool is_hit_face(enum field_size s, int x, int y)
+bool is_hit_face(enum field_size s, int x, int y)
 {
     /* Main part */
     if (s == small) {
         return (x >= small_face_x_offset && x <= small_face_x_offset + face_w &&
-                y >= small_face_y_offset && y <= small_face_y_offset + face_h) ? __true : __false;
+                y >= small_face_y_offset && y <= small_face_y_offset + face_h) ? true : false;
     } else if (s == medium) {
         return (x >= medium_face_x_offset && x <= medium_face_x_offset + face_w &&
-                y >= medium_face_y_offset && y <= medium_face_y_offset + face_h) ? __true : __false;
+                y >= medium_face_y_offset && y <= medium_face_y_offset + face_h) ? true : false;
     } else if (s == large) {
         return (x >= large_face_x_offset && x <= large_face_x_offset + face_w &&
-                y >= large_face_y_offset && y <= large_face_y_offset + face_h) ? __true : __false;
+                y >= large_face_y_offset && y <= large_face_y_offset + face_h) ? true : false;
     }
 }
 
@@ -208,14 +210,14 @@ __bool is_hit_face(enum field_size s, int x, int y)
 void two_btns(struct game_field *fld, int x, int y)
 {
     int i = 0, j = 0, i1, j1;
-    __bool is_found = __false;
+    bool is_found = false;
 
     /* Main part */
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
             if (x >= fld->fld[i][j].rect.x && x <= fld->fld[i][j].rect.x + fld->fld[i][j].rect.w &&
                 y >= fld->fld[i][j].rect.y && y <= fld->fld[i][j].rect.y + fld->fld[i][j].rect.h) {
-                is_found = __true;
+                is_found = true;
                 break;
             }
         }
@@ -241,9 +243,9 @@ void two_btns(struct game_field *fld, int x, int y)
 
 void Menu_state_init(struct game_field *fld, struct menu_state *st)
 {
-    st->menu_i_begginer = (fld->s == small) ? __true : __false;
-    st->menu_i_intermediate = (fld->s == medium) ? __true : __false;
-    st->menu_i_advanced = (fld->s == large) ? __true : __false;
+    st->menu_i_begginer = (fld->s == small) ? true : false;
+    st->menu_i_intermediate = (fld->s == medium) ? true : false;
+    st->menu_i_advanced = (fld->s == large) ? true : false;
 
     st->menu_i_marks = fld->is_mks_on;
     st->menu_i_color = fld->is_clr_on;
@@ -298,7 +300,7 @@ void Open_field(struct game_field *fld, int *currm)
 }
 
 
-__bool R_u_s(void)
+bool R_u_s(void)
 {
     int func;
 
@@ -313,8 +315,8 @@ __bool R_u_s(void)
         }
     } else {
         while (getchar() != '\n');
-        return __false;
+        return false;
     }
 
-    return __true;
+    return true;
 }

@@ -18,6 +18,8 @@
    along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <stdbool.h>
+
 #include "mines.h"
 
 
@@ -94,12 +96,12 @@ void Process_press(struct game_field *fld, block *curr_block)
 void Open_near_blank(struct game_field *fld, block *curr_block)
 {
     int i = 0, j = 0, i1, j1;
-    __bool is_found = __false;
+    bool is_found = false;
 
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
             if (fld->fld[i] + j == curr_block) {
-                is_found = __true;
+                is_found = true;
                 if (curr_block->check != flaggy) {
                     curr_block->check = pressed;
                 }
@@ -174,12 +176,12 @@ void Check_for_win(struct game_field *fld, int *minesleft)
 void Mine_searcher(struct game_field *fld, block *obj)
 {
     int i = 0, j = 0, i1, j1, counter = 0;
-    __bool is_found = __false, can_search = __false;
+    bool is_found = false, can_search = false;
 
     for (i = 0; i < fld->tiles_y; ++i) {
         for (j = 0; j < fld->tiles_x; ++j) {
             if (fld->fld[i] + j == obj) {
-                is_found = __true;
+                is_found = true;
                 break;
             }
         }
@@ -198,7 +200,7 @@ void Mine_searcher(struct game_field *fld, block *obj)
         }
 
         if (counter >= obj->digit) {
-            can_search = __true;
+            can_search = true;
         }
 
         if (can_search) {

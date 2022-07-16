@@ -18,6 +18,8 @@
    along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <stdbool.h>
+
 #include "mines.h"
 
 
@@ -43,7 +45,7 @@ int main(int argc, const char *argv[], const char *envp[])
     strcpy(hp1, hp);
 #endif
 
-    __bool quit = __false;
+    bool quit = false;
     union SDL_Event event, new_event;
     int get_ev = 0;
 
@@ -55,14 +57,14 @@ int main(int argc, const char *argv[], const char *envp[])
     struct SDL_Texture *menu_texture = NULL;
     struct SDL_Texture *selectTexture = NULL;
 
-    struct game_field field = {NULL, 0, 0, small, game_off, menu_off, __true, __true, __false};
+    struct game_field field = {NULL, 0, 0, small, game_off, menu_off, true, true, false};
     enum field_size s = Get_Size(argc, argv);
     struct menu_state m_state;
     int menu_press_state;
 
     size_t starttime = 0, currtime = 0;
     int minesleft;
-    __bool is_start = __false;
+    bool is_start = false;
     enum face_state fc = face_normal;
     enum face_state beg_fc = face_normal;
 
@@ -79,7 +81,7 @@ int main(int argc, const char *argv[], const char *envp[])
     srand(time(NULL) / 2);
     SDL_init_all();
     if (Init_window(&window, &renderer, s)) {
-        if (Field_init(&field, s) == __false) {
+        if (Field_init(&field, s) == false) {
             exit(EXIT_FAILURE);
         }
         Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);
@@ -103,14 +105,14 @@ int main(int argc, const char *argv[], const char *envp[])
                 case game_start:
                     break;
                 case game_lose:
-                    is_start = __false;
+                    is_start = false;
                     if (fc != face_dead && fc != face_pressed) {
                         fc = face_dead;
                         beg_fc = face_dead;
                     }
                     break;
                 case game_win:
-                    is_start = __false;
+                    is_start = false;
                     if (fc != face_cool && fc != face_pressed) {
                         fc = face_cool;
                         beg_fc = face_cool;
@@ -121,7 +123,7 @@ int main(int argc, const char *argv[], const char *envp[])
             }
             while (SDL_PollEvent(&event)) {
                 if (event.type == SDL_QUIT) {
-                    quit = __true;
+                    quit = true;
                 }
 
                 if (field.g_state != game_lose && field.g_state != game_win) {
@@ -200,7 +202,7 @@ int main(int argc, const char *argv[], const char *envp[])
                                 Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
                                 if (!(menu_press_state = Process_menu_press(&m_state))) {
                                     Field_init(&field, s);
-                                    is_start = __false;
+                                    is_start = false;
                                     starttime = 0;
                                     currtime = 0;
                                     minesleft = mines_l(field.s);
@@ -220,11 +222,11 @@ int main(int argc, const char *argv[], const char *envp[])
                                     SDL_DestroyWindow(window);
                                     s = (menu_press_state == 1) ? small : (menu_press_state == 2) ? medium : large;
                                     if (Init_window(&window, &renderer, s)) {
-                                        if (Field_init(&field, s) == __false) {
+                                        if (Field_init(&field, s) == false) {
                                             exit(BAD_EXIT_CODE);
                                         }
 
-                                        is_start = __false;
+                                        is_start = false;
                                         starttime = 0;
                                         currtime = 0;
                                         minesleft = mines_l(field.s);
@@ -247,7 +249,7 @@ int main(int argc, const char *argv[], const char *envp[])
                                     }
                                 } else if (menu_press_state == 4) {
                                     field.is_mks_on = m_state.menu_i_marks;
-                                    if (field.is_mks_on == __false) {
+                                    if (field.is_mks_on == false) {
                                         Remove_questions(&field);
                                     }
                                 } else if (menu_press_state == 5) {
@@ -263,7 +265,7 @@ int main(int argc, const char *argv[], const char *envp[])
                                 } else if (menu_press_state == 7) {
                                     Print_Records(records);
                                 } else if (menu_press_state == 8) {
-                                    quit = __true;
+                                    quit = true;
                                     break;
                                 }
                                 field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, UNPRESS);
@@ -280,11 +282,11 @@ int main(int argc, const char *argv[], const char *envp[])
                                 }
                                 if (!is_start) {
                                     starttime = SDL_GetTicks();
-                                    is_start = __true;
+                                    is_start = true;
                                 }
                             } else if (is_hit_face(field.s, event.button.x, event.button.y) && fc == face_pressed) {
                                 Field_init(&field, s);
-                                is_start = __false;
+                                is_start = false;
                                 starttime = 0;
                                 currtime = 0;
                                 minesleft = mines_l(field.s);
@@ -303,14 +305,14 @@ int main(int argc, const char *argv[], const char *envp[])
                                 }
                                 if (!is_start) {
                                     starttime = SDL_GetTicks();
-                                    is_start = __true;
+                                    is_start = true;
                                 }
                             }
                         }
                         if (btn == mbtn_mid && !is_start &&
                             get_clicked_block(&field, event.button.x, event.button.y) != NULL) {
                             starttime = SDL_GetTicks();
-                            is_start = __true;
+                            is_start = true;
                         }
                         fc = face_normal;
                         btn = mbtn_no_btn;
@@ -360,7 +362,7 @@ int main(int argc, const char *argv[], const char *envp[])
                         if (event.button.button == SDL_BUTTON_LEFT) {
                             if (is_hit_face(field.s, event.button.x, event.button.y)) {
                                 Field_init(&field, s);
-                                is_start = __false;
+                                is_start = false;
                                 starttime = 0;
                                 currtime = 0;
                                 minesleft = mines_l(field.s);
@@ -373,7 +375,7 @@ int main(int argc, const char *argv[], const char *envp[])
                                        Check_hover(field.s, &m_state, event.button.x, event.button.y)) {
                                 if (!(menu_press_state = Process_menu_press(&m_state))) {
                                     Field_init(&field, s);
-                                    is_start = __false;
+                                    is_start = false;
                                     starttime = 0;
                                     currtime = 0;
                                     minesleft = mines_l(field.s);
@@ -393,11 +395,11 @@ int main(int argc, const char *argv[], const char *envp[])
                                     SDL_DestroyWindow(window);
                                     s = (menu_press_state == 1) ? small : (menu_press_state == 2) ? medium : large;
                                     if (Init_window(&window, &renderer, s)) {
-                                        if (Field_init(&field, s) == __false) {
+                                        if (Field_init(&field, s) == false) {
                                             exit(BAD_EXIT_CODE);
                                         }
 
-                                        is_start = __false;
+                                        is_start = false;
                                         starttime = 0;
                                         currtime = 0;
                                         minesleft = mines_l(field.s);
@@ -420,7 +422,7 @@ int main(int argc, const char *argv[], const char *envp[])
                                     }
                                 } else if (menu_press_state == 4) {
                                     field.is_mks_on = m_state.menu_i_marks;
-                                    if (field.is_mks_on == __false) {
+                                    if (field.is_mks_on == false) {
                                         Remove_questions(&field);
                                     }
                                 } else if (menu_press_state == 5) {
@@ -436,7 +438,7 @@ int main(int argc, const char *argv[], const char *envp[])
                                 } else if (menu_press_state == 7) {
                                     Print_Records(records);
                                 } else if (menu_press_state == 8) {
-                                    quit = __true;
+                                    quit = true;
                                     break;
                                 }
                                 field.m_state = Is_menu_pressed(&field, event.button.x, event.button.y, UNPRESS);
@@ -458,7 +460,7 @@ int main(int argc, const char *argv[], const char *envp[])
                 if (event.type == SDL_KEYDOWN) {
                     if (event.key.keysym.sym == SDLK_F2) {
                         Field_init(&field, s);
-                        is_start = __false;
+                        is_start = false;
                         starttime = 0;
                         currtime = 0;
                         minesleft = mines_l(field.s);
@@ -475,7 +477,7 @@ int main(int argc, const char *argv[], const char *envp[])
                 currtime = SDL_GetTicks() + 1000 - starttime;
             }
             if (currtime / 1000 == 999) {
-                is_start = __false;
+                is_start = false;
             }
             SDL_RenderClear(renderer);
             Check_for_win(&field, &minesleft);

@@ -18,6 +18,8 @@
    along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <stdbool.h>
+
 #include "mines.h"
 
 
@@ -47,9 +49,9 @@ enum menu_panel Is_menu_pressed(struct game_field *fld, int x, int y, int pr_u)
 }
 
 
-__bool Check_hover(enum field_size s, struct menu_state *st, int x, int y)
+bool Check_hover(enum field_size s, struct menu_state *st, int x, int y)
 {
-    __bool is_changed = __false;
+    bool is_changed = false;
     int x_o = (s == small) ? small_menu_game_x_offset : (s == medium) ? medium_menu_game_x_offset
                                                                       : large_menu_game_x_offset;
 
@@ -57,31 +59,31 @@ __bool Check_hover(enum field_size s, struct menu_state *st, int x, int y)
     if (x >= x_o && x <= x_o + menu_itm_w) {
         if (y >= menu_new_y_offset && y <= menu_new_y_offset + menu_itm_h) {
             st->is_hovered = 0;
-            is_changed = __true;
+            is_changed = true;
         } else if (y >= menu_beg_y_offset && y <= menu_beg_y_offset + menu_itm_h) {
             st->is_hovered = 1;
-            is_changed = __true;
+            is_changed = true;
         } else if (y >= menu_interm_y_offset && y <= menu_interm_y_offset + menu_itm_h) {
             st->is_hovered = 2;
-            is_changed = __true;
+            is_changed = true;
         } else if (y >= menu_adv_y_offset && y <= menu_adv_y_offset + menu_itm_h) {
             st->is_hovered = 3;
-            is_changed = __true;
+            is_changed = true;
         } else if (y >= menu_mks_y_offset && y <= menu_mks_y_offset + menu_itm_h) {
             st->is_hovered = 4;
-            is_changed = __true;
+            is_changed = true;
         } else if (y >= menu_clr_y_offset && y <= menu_clr_y_offset + menu_itm_h) {
             st->is_hovered = 5;
-            is_changed = __true;
+            is_changed = true;
         } else if (y >= menu_snd_y_offset && y <= menu_snd_y_offset + menu_itm_h) {
             st->is_hovered = 6;
-            is_changed = __true;
+            is_changed = true;
         } else if (y >= menu_tabl_y_offset && y <= menu_tabl_y_offset + menu_itm_h) {
             st->is_hovered = 7;
-            is_changed = __true;
+            is_changed = true;
         } else if (y >= menu_exit_y_offset && y <= menu_exit_y_offset + menu_itm_h) {
             st->is_hovered = 8;
-            is_changed = __true;
+            is_changed = true;
         } else {
             st->is_hovered = NOT_HOVERED;
         }
@@ -101,19 +103,19 @@ int Process_menu_press(struct menu_state *st)
         case 8:
             break;
         case 1:
-            st->menu_i_begginer = __true;
-            st->menu_i_intermediate = __false;
-            st->menu_i_advanced = __false;
+            st->menu_i_begginer = true;
+            st->menu_i_intermediate = false;
+            st->menu_i_advanced = false;
             break;
         case 2:
-            st->menu_i_intermediate = __true;
-            st->menu_i_begginer = __false;
-            st->menu_i_advanced = __false;
+            st->menu_i_intermediate = true;
+            st->menu_i_begginer = false;
+            st->menu_i_advanced = false;
             break;
         case 3:
-            st->menu_i_advanced = __true;
-            st->menu_i_begginer = __false;
-            st->menu_i_intermediate = __false;
+            st->menu_i_advanced = true;
+            st->menu_i_begginer = false;
+            st->menu_i_intermediate = false;
             break;
         case 4:
             st->menu_i_marks = REVERSE_BOOL(st->menu_i_marks);

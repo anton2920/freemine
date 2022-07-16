@@ -268,13 +268,13 @@ enum menu_panel {
 
 
 struct menu_state {
-    __bool menu_i_begginer;
-    __bool menu_i_intermediate;
-    __bool menu_i_advanced;
+    bool menu_i_begginer;
+    bool menu_i_intermediate;
+    bool menu_i_advanced;
 
-    __bool menu_i_marks;
-    __bool menu_i_color;
-    __bool menu_i_sound;
+    bool menu_i_marks;
+    bool menu_i_color;
+    bool menu_i_sound;
 
     int is_hovered; /* One to eight, -1 if not */
 };
@@ -295,9 +295,9 @@ struct game_field {
     enum field_size s;
     enum game_state g_state;
     enum menu_panel m_state;
-    __bool is_mks_on;
-    __bool is_clr_on;
-    __bool is_snd_on;
+    bool is_mks_on;
+    bool is_clr_on;
+    bool is_snd_on;
 };
 
 
@@ -308,23 +308,23 @@ struct person {
 
 
 /* help_routines.c */
-__bool SDL_init_all();
-__bool Init_window(struct SDL_Window **window, struct SDL_Renderer **renderer, enum field_size);
-__bool Field_init(struct game_field *, enum field_size);
+bool SDL_init_all();
+bool Init_window(struct SDL_Window **window, struct SDL_Renderer **renderer, enum field_size);
+bool Field_init(struct game_field *, enum field_size);
 void Field_destroy(struct game_field *, enum field_size);
 enum field_size Get_Size(int, const char *argv[]);
 int mines_l(enum field_size);
 block *get_clicked_block(struct game_field *, int, int);
-enum check_type switch_block_check_type(block *, enum mbtn, __bool);
+enum check_type switch_block_check_type(block *, enum mbtn, bool);
 void Block_untoggle_hovered(struct game_field *);
-__bool is_hit_face(enum field_size, int, int);
+bool is_hit_face(enum field_size, int, int);
 void two_btns(struct game_field *, int, int);
 void Menu_state_init(struct game_field *, struct menu_state *);
 void Play_music(Mix_Music **fon, char *name);
 void Play_click_sound(struct Mix_Chunk *Sound);
 void Remove_questions(struct game_field *);
 void Open_field(struct game_field *, int *);
-__bool R_u_s(void);
+bool R_u_s(void);
 
 
 /* draw.c */
@@ -349,14 +349,14 @@ void Mine_searcher(struct game_field *, block *);
 
 /* menu.c */
 enum menu_panel Is_menu_pressed(struct game_field *fld, int x, int y, int pr_u);
-__bool Check_hover(enum field_size, struct menu_state *, int x, int y);
+bool Check_hover(enum field_size, struct menu_state *, int x, int y);
 int Process_menu_press(struct menu_state *);
 
 
 /* lead.c */
 void Write_Records(struct person *p);
 void Read_Records(struct person *p);
-__bool Check_Records(struct person *p, enum field_size s, int time);
+bool Check_Records(struct person *p, enum field_size s, int time);
 void Print_Records(struct person *p);
 void New_Record(struct person *p, enum field_size s, int time);
 

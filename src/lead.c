@@ -18,6 +18,8 @@
    along with FreeMine. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <stdbool.h>
+
 #include "mines.h"
 
 
@@ -62,17 +64,17 @@ void Read_Records(struct person *p)
 }
 
 
-__bool Check_Records(struct person *p, enum field_size s, int time)
+bool Check_Records(struct person *p, enum field_size s, int time)
 {
     Read_Records(p);
 
     if ((time < p[0].time && s == small) || (time < p[1].time && s == medium)
         || (time < p[2].time && s == large)) {
         New_Record(p, s, time);
-        return __true;
+        return true;
     }
 
-    return __false;
+    return false;
 }
 
 
